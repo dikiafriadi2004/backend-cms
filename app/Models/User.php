@@ -29,6 +29,15 @@ class User extends Authenticatable
     ];
 
     /**
+     * The attributes that should be appended to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'avatar_url'
+    ];
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
@@ -82,7 +91,12 @@ class User extends Authenticatable
     public function getAvatarUrlAttribute()
     {
         if ($this->avatar) {
-            return Storage::url($this->avatar);
+            // If avatar is already a full URL, return as is
+            if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
+                return $this->avatar;
+            }
+            // If it's a relative path, convert to full URL
+            return url(Storage::url($this->avatar));
         }
         
         // Generate default avatar with initials

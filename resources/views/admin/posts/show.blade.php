@@ -20,7 +20,7 @@
         <div class="card">
             <div class="card-body">
                 @if($post->getFirstMediaUrl('thumbnail'))
-                    <img src="{{ $post->getFirstMediaUrl('thumbnail', 'medium') }}" 
+                    <img src="{{ $post->getFirstMediaUrl('thumbnail') }}" 
                          alt="{{ $post->title }}" 
                          class="w-full h-64 object-cover rounded-lg mb-6">
                 @endif

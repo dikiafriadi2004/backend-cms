@@ -5,6 +5,29 @@
 
     RewriteEngine On
 
+    # Security Headers
+    <IfModule mod_headers.c>
+        Header always set X-Content-Type-Options nosniff
+        Header always set X-Frame-Options DENY
+        Header always set X-XSS-Protection "1; mode=block"
+        Header always set Referrer-Policy "strict-origin-when-cross-origin"
+        Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        Header unset Server
+        Header unset X-Powered-By
+    </IfModule>
+
+    # Block access to sensitive files
+    <FilesMatch "\.(env|log|htaccess|htpasswd|ini|phps|fla|psd|log|sh)$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+
+    # Block access to directories
+    <DirectoryMatch "^(.*)/(storage|vendor|node_modules|tests|database)/">
+        Order Allow,Deny
+        Deny from all
+    </DirectoryMatch>
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

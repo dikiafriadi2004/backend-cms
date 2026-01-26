@@ -14,6 +14,7 @@ class MenuItem extends Model
         'url',
         'type',
         'page_id',
+        'post_id',
         'parent_id',
         'order',
         'target',
@@ -33,6 +34,11 @@ class MenuItem extends Model
     public function page()
     {
         return $this->belongsTo(Page::class);
+    }
+
+    public function post()
+    {
+        return $this->belongsTo(\App\Models\Post::class);
     }
 
     public function parent()

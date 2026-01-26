@@ -14,7 +14,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- TinyMCE Local -->
+    <!-- TinyMCE Self-hosted -->
     <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
     
     <!-- SortableJS for Drag & Drop -->
@@ -152,6 +152,15 @@
                     </a>
                     @endcan
 
+                    @can('view contacts')
+                    <a href="{{ route('admin.contacts.index') }}" class="sidebar-link @if(request()->routeIs('admin.contacts.*')) active @endif">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                        </svg>
+                        Contacts
+                    </a>
+                    @endcan
+
                     <div class="pt-4 mt-4 border-t border-gray-200">
                         <a href="{{ route('admin.filemanager.index') }}" class="sidebar-link @if(request()->routeIs('admin.filemanager.*')) active @endif">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,7 +177,7 @@
         <!-- Main content -->
         <div class="lg:pl-64">
             <!-- Top navigation -->
-            <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 sm:px-6 lg:px-8 shadow-sm">
                 <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                     <div class="flex flex-1"></div>
                     <div class="flex items-center gap-x-4 lg:gap-x-6">
@@ -220,10 +229,10 @@
 
             <!-- Page header -->
             <header class="bg-white shadow-sm sticky top-16 z-30">
-                <div class="px-4 py-4 sm:px-6">
+                <div class="px-4 sm:px-6 lg:px-8 py-3">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h1 class="text-2xl font-bold tracking-tight text-gray-900">
+                            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
                                 @yield('title', 'Dashboard')
                             </h1>
                             <p class="mt-1 text-sm text-gray-600">
@@ -239,11 +248,8 @@
 
             <!-- Main content -->
             <main>
-                <div class="px-4 py-4 sm:px-6">
-                    <!-- Content wrapper with full width -->
-                    <div>
-                        @yield('content')
-                    </div>
+                <div class="p-4 sm:p-6 lg:p-8">
+                    @yield('content')
                 </div>
             </main>
         </div>

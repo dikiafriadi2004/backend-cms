@@ -15,13 +15,13 @@ return [
     |--------------------------------------------------------------------------
      */
 
-    'use_package_routes'       => true,
+    'use_package_routes'       => false,
 
     //Middlewares to be applied to default routes when use_package_routes is true
     'middlewares'              => ['web','auth'],
 
     //The url prefix to this package.
-    'url_prefix'               => 'filemanager',
+    'url_prefix'               => 'admin/lfm',
 
     /*
     |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ return [
     |
      */
 
-    'allow_private_folder'     => true,
+    'allow_private_folder'     => false,
 
     // Flexible way to customize client folders accessibility
     // If you want to customize client folders, publish tag="lfm_handler"
@@ -43,7 +43,7 @@ return [
 
     'allow_shared_folder'      => true,
 
-    'shared_folder_name'       => 'shares',
+    'shared_folder_name'       => '',
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +56,7 @@ return [
             'folder_name'  => 'files',
             'startup_view' => 'list',
             'max_size'     => 50000, // size in KB
-            'thumb' => true,
+            'thumb' => false,
             'thumb_width' => 80,
             'thumb_height' => 80,
             'valid_mime'   => [
@@ -69,10 +69,10 @@ return [
             ],
         ],
         'image' => [
-            'folder_name'  => 'photos',
+            'folder_name'  => 'images',
             'startup_view' => 'grid',
             'max_size'     => 50000, // size in KB
-            'thumb' => true,
+            'thumb' => false,
             'thumb_width' => 80,
             'thumb_height' => 80,
             'valid_mime'   => [
@@ -143,7 +143,7 @@ return [
      */
 
     // If true, image thumbnails would be created during upload
-    'should_create_thumbnails' => true,
+    'should_create_thumbnails' => false,
 
     'thumb_folder_name'        => 'thumbs',
 

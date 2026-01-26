@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-    /**
-     * Display a listing of tags.
-     */
     public function index()
     {
         $tags = Tag::withCount('posts')
@@ -23,9 +20,6 @@ class TagController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified tag.
-     */
     public function show($slug)
     {
         $tag = Tag::where('slug', $slug)
@@ -45,9 +39,6 @@ class TagController extends Controller
         ]);
     }
 
-    /**
-     * Get tag posts.
-     */
     public function posts($slug, Request $request)
     {
         $tag = Tag::where('slug', $slug)->first();
@@ -88,9 +79,6 @@ class TagController extends Controller
         ]);
     }
 
-    /**
-     * Get popular tags.
-     */
     public function popular(Request $request)
     {
         $limit = $request->get('limit', 10);

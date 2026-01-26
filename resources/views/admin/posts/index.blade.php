@@ -112,7 +112,7 @@
                                     <div class="flex items-center">
                                         @if($post->getFirstMediaUrl('thumbnail'))
                                             <img class="h-10 w-10 rounded object-cover mr-3" 
-                                                 src="{{ $post->getFirstMediaUrl('thumbnail', 'thumb') }}" 
+                                                 src="{{ $post->getFirstMediaUrl('thumbnail') }}" 
                                                  alt="{{ $post->title }}">
                                         @endif
                                         <div>

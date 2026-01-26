@@ -34,7 +34,7 @@ class PostController extends Controller
             $query->where('category_id', $request->category);
         }
 
-        $posts = $query->latest()->paginate(15);
+        $posts = $query->latest()->paginate(10);
         $categories = Category::all();
         
         // Get trash count for the tab

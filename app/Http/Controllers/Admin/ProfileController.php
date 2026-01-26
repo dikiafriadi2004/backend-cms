@@ -31,7 +31,9 @@ class ProfileController extends Controller
 
         // Handle avatar removal
         if ($request->remove_avatar && $user->avatar) {
-            Storage::disk('public')->delete($user->avatar);
+            // Extract path from URL if it's a full URL
+            $avatarPath = str_replace(url('storage/'), '', $user->avatar);
+            Storage::disk('public')->delete($avatarPath);
             $user->avatar = null;
         }
 
@@ -39,12 +41,15 @@ class ProfileController extends Controller
         if ($request->hasFile('avatar')) {
             // Delete old avatar
             if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
+                // Extract path from URL if it's a full URL
+                $oldPath = str_replace(url('storage/'), '', $user->avatar);
+                Storage::disk('public')->delete($oldPath);
             }
             
             // Store new avatar
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $avatarPath;
+            $avatarUrl = url('storage/' . $avatarPath);
+            $user->avatar = $avatarUrl;
         }
 
         // Update user data

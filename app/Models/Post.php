@@ -16,7 +16,9 @@ class Post extends Model implements HasMedia
     use HasFactory, SoftDeletes, HasSlug, InteractsWithMedia;
 
     protected $appends = [
-        'featured_image'
+        'featured_image',
+        'thumbnail_url',
+        'image_urls'
     ];
 
     protected $fillable = [
@@ -111,11 +113,68 @@ class Post extends Model implements HasMedia
 
     public function getThumbnailUrlAttribute()
     {
-        return $this->getFirstMediaUrl('thumbnail', 'thumb') ?: asset('images/default-post.jpg');
+        $media = $this->getFirstMedia('thumbnail');
+        if (!$media) {
+            return null;
+        }
+        
+        // Use the media's file path relative to storage/app/public
+        $pathGenerator = app(config('media-library.path_generator'));
+        $directory = $pathGenerator->getPath($media);
+        $relativePath = $directory . $media->file_name;
+        
+        // Generate full URL using asset() helper
+        return asset('storage/' . $relativePath);
     }
 
     public function getFeaturedImageAttribute()
     {
-        return $this->getFirstMediaUrl('thumbnail') ?: null;
+        $media = $this->getFirstMedia('thumbnail');
+        if (!$media) {
+            return null;
+        }
+        
+        // Use the media's file path relative to storage/app/public
+        $pathGenerator = app(config('media-library.path_generator'));
+        $directory = $pathGenerator->getPath($media);
+        $relativePath = $directory . $media->file_name;
+        
+        // Generate full URL using asset() helper
+        return asset('storage/' . $relativePath);
+    }
+
+    public function getImageUrlsAttribute()
+    {
+        $media = $this->getFirstMedia('thumbnail');
+        if (!$media) {
+            return null;
+        }
+        
+        // Use the media's file path relative to storage/app/public
+        $pathGenerator = app(config('media-library.path_generator'));
+        $directory = $pathGenerator->getPath($media);
+        $relativePath = $directory . $media->file_name;
+        $originalUrl = asset('storage/' . $relativePath);
+        
+        return [
+            'original' => $originalUrl,
+            'medium' => $originalUrl, // For now, use original since conversions might not be generated
+            'thumb' => $originalUrl,  // For now, use original since conversions might not be generated
+        ];
+    }
+
+    protected function getConversionUrl($media, $conversion)
+    {
+        try {
+            $path = $media->getPath($conversion);
+            $relativePath = str_replace(storage_path('app/public/'), '', $path);
+            return asset('storage/' . $relativePath);
+        } catch (\Exception $e) {
+            // Fallback to original if conversion fails
+            $pathGenerator = app(config('media-library.path_generator'));
+            $directory = $pathGenerator->getPath($media);
+            $relativePath = $directory . $media->file_name;
+            return asset('storage/' . $relativePath);
+        }
     }
 }

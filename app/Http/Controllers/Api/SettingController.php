@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
-    /**
-     * Get all public settings.
-     */
     public function index()
     {
         $settings = Setting::all()->pluck('value', 'key');
@@ -26,15 +24,15 @@ class SettingController extends Controller
             'mail_encryption'
         ]);
 
+        // Convert image paths to full URLs
+        $publicSettings = $this->convertImagePathsToUrls($publicSettings);
+
         return response()->json([
             'success' => true,
             'data' => $publicSettings
         ]);
     }
 
-    /**
-     * Get general settings.
-     */
     public function general()
     {
         $generalKeys = [
@@ -55,15 +53,15 @@ class SettingController extends Controller
             ->get()
             ->pluck('value', 'key');
 
+        // Convert image paths to full URLs
+        $settings = $this->convertImagePathsToUrls($settings);
+
         return response()->json([
             'success' => true,
             'data' => $settings
         ]);
     }
 
-    /**
-     * Get SEO settings.
-     */
     public function seo()
     {
         $seoKeys = [
@@ -82,15 +80,15 @@ class SettingController extends Controller
             ->get()
             ->pluck('value', 'key');
 
+        // Convert image paths to full URLs
+        $settings = $this->convertImagePathsToUrls($settings);
+
         return response()->json([
             'success' => true,
             'data' => $settings
         ]);
     }
 
-    /**
-     * Get social media settings.
-     */
     public function social()
     {
         $socialKeys = [
@@ -113,9 +111,6 @@ class SettingController extends Controller
         ]);
     }
 
-    /**
-     * Get company profile settings.
-     */
     public function company()
     {
         $companyKeys = [
@@ -150,9 +145,6 @@ class SettingController extends Controller
         ]);
     }
 
-    /**
-     * Get specific setting by key.
-     */
     public function show($key)
     {
         $setting = Setting::where('key', $key)->first();
@@ -182,12 +174,76 @@ class SettingController extends Controller
             ], 403);
         }
 
+        $value = $setting->value;
+
+        // Convert image path to full URL if it's an image setting
+        if ($this->isImageSetting($key) && $value) {
+            $value = $this->convertPathToUrl($value);
+        }
+
         return response()->json([
             'success' => true,
             'data' => [
                 'key' => $setting->key,
-                'value' => $setting->value
+                'value' => $value
             ]
         ]);
+    }
+
+    private function convertImagePathsToUrls($settings)
+    {
+        $imageKeys = [
+            'site_logo',
+            'site_favicon',
+            'og_image',
+            'company_logo',
+            'company_favicon'
+        ];
+
+        foreach ($imageKeys as $key) {
+            if (isset($settings[$key]) && $settings[$key]) {
+                $settings[$key] = $this->convertPathToUrl($settings[$key]);
+            }
+        }
+
+        return $settings;
+    }
+
+    private function convertPathToUrl($path)
+    {
+        if (!$path) {
+            return null;
+        }
+
+        // If already a full URL, return as is
+        if (filter_var($path, FILTER_VALIDATE_URL)) {
+            return $path;
+        }
+
+        // If starts with http or https, return as is
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        // Convert storage path to full URL
+        if (Storage::disk('public')->exists($path)) {
+            return url(Storage::url($path));
+        }
+
+        // Fallback: construct URL manually
+        return url('/storage/' . ltrim($path, '/'));
+    }
+
+    private function isImageSetting($key)
+    {
+        $imageKeys = [
+            'site_logo',
+            'site_favicon',
+            'og_image',
+            'company_logo',
+            'company_favicon'
+        ];
+
+        return in_array($key, $imageKeys);
     }
 }

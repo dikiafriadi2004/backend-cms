@@ -101,6 +101,7 @@
                             <label for="template" class="form-label">Page Template</label>
                             <select id="template" name="template" class="form-select">
                                 <option value="default" {{ old('template', 'default') == 'default' ? 'selected' : '' }}>Default</option>
+                                <option value="blog" {{ old('template') == 'blog' ? 'selected' : '' }}>Blog/Posts</option>
                                 <option value="contact" {{ old('template') == 'contact' ? 'selected' : '' }}>Contact</option>
                                 <option value="about" {{ old('template') == 'about' ? 'selected' : '' }}>About</option>
                                 <option value="services" {{ old('template') == 'services' ? 'selected' : '' }}>Services</option>

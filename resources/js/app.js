@@ -8,7 +8,8 @@ Alpine.start();
 
 // Advanced TinyMCE Configuration (Self-hosted, no API key required)
 document.addEventListener('DOMContentLoaded', function() {
-    if (typeof tinymce !== 'undefined') {
+    // Only initialize TinyMCE if we're not on the contact reply page
+    if (typeof tinymce !== 'undefined' && !document.getElementById('reply-form')) {
         tinymce.init({
             selector: '.tinymce-editor',
             height: 500,
@@ -59,12 +60,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             `,
             
-            // Advanced options
+            // Advanced options - completely disable branding and promotional content
             branding: false,
             promotion: false,
             resize: true,
             elementpath: true,
             statusbar: true,
+            
+            // Disable upgrade notifications and API key prompts
+            plugins_url: false,
+            external_plugins: {},
+            
+            // Additional settings to prevent API key prompts
+            license_key: 'gpl',
+            
+            // URL handling - prevent TinyMCE from converting URLs to relative paths
+            relative_urls: false,
+            remove_script_host: false,
+            convert_urls: false,
             
             // Disable quickbars to prevent popup toolbars
             quickbars_selection_toolbar: false,
@@ -73,7 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Image handling
             automatic_uploads: true,
             images_upload_url: '/admin/filemanager/upload',
-            images_upload_base_path: '/storage',
+            // Remove images_upload_base_path to prevent URL conversion to relative paths
+            // images_upload_base_path: '/storage',
             images_upload_credentials: true,
             images_upload_handler: function (blobInfo, success, failure, progress) {
                 const xhr = new XMLHttpRequest();
@@ -124,6 +138,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // File picker for images and files
             file_picker_callback: function(callback, value, meta) {
+                console.log('TinyMCE file picker called', meta);
+                
                 let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
                 let y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
 
@@ -134,20 +150,70 @@ document.addEventListener('DOMContentLoaded', function() {
                     cmsURL = cmsURL + "&type=file";
                 }
 
-                tinymce.activeEditor.windowManager.openUrl({
-                    url : cmsURL,
-                    title : 'File Manager',
-                    width : x * 0.8,
-                    height : y * 0.8,
-                    resizable : "yes",
-                    close_previous : "no"
-                });
+                console.log('Opening file manager:', cmsURL);
                 
-                // Global callback for file selection
+                // Clear any existing callbacks
+                if (window.setFileUrl) {
+                    delete window.setFileUrl;
+                }
+                
+                // Set up the callback function
                 window.setFileUrl = function(url) {
+                    console.log('File selected via callback:', url);
                     callback(url);
-                    tinymce.activeEditor.windowManager.close();
+                    
+                    // Close the window manager
+                    if (tinymce.activeEditor && tinymce.activeEditor.windowManager) {
+                        tinymce.activeEditor.windowManager.close();
+                    }
+                    
+                    // Clean up
+                    delete window.setFileUrl;
                 };
+                
+                // Set up message listener for postMessage communication
+                const messageHandler = function(event) {
+                    console.log('Message received:', event.data);
+                    if (event.data && event.data.mceAction === 'fileSelected') {
+                        console.log('File selected via postMessage:', event.data.url);
+                        callback(event.data.url);
+                        
+                        // Close the window manager
+                        if (tinymce.activeEditor && tinymce.activeEditor.windowManager) {
+                            tinymce.activeEditor.windowManager.close();
+                        }
+                        
+                        // Clean up
+                        window.removeEventListener('message', messageHandler);
+                        delete window.setFileUrl;
+                    }
+                };
+                
+                window.addEventListener('message', messageHandler);
+
+                // Open the file manager popup
+                try {
+                    tinymce.activeEditor.windowManager.openUrl({
+                        url : cmsURL,
+                        title : 'File Manager',
+                        width : Math.min(x * 0.8, 1200),
+                        height : Math.min(y * 0.8, 800),
+                        resizable : true,
+                        maximizable : true,
+                        close_previous : false,
+                        onClose: function() {
+                            console.log('File manager popup closed');
+                            // Clean up event listeners and callbacks
+                            window.removeEventListener('message', messageHandler);
+                            if (window.setFileUrl) {
+                                delete window.setFileUrl;
+                            }
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error opening file manager:', error);
+                    alert('Error opening file manager: ' + error.message);
+                }
             },
             
             // Templates

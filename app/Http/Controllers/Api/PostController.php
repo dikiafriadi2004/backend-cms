@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of published posts.
-     */
     public function index(Request $request)
     {
         $query = Post::with(['user:id,name', 'category:id,name,slug,color', 'tags:id,name,slug,color'])
@@ -65,9 +62,6 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified post.
-     */
     public function show($slug)
     {
         $post = Post::with(['user:id,name', 'category:id,name,slug,color', 'tags:id,name,slug,color'])
@@ -98,9 +92,6 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * Get featured posts.
-     */
     public function featured()
     {
         $posts = Post::with(['user:id,name', 'category:id,name,slug,color'])
@@ -116,9 +107,6 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * Get latest posts.
-     */
     public function latest(Request $request)
     {
         $limit = $request->get('limit', 5);
@@ -135,9 +123,6 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * Get posts for infinite scroll
-     */
     public function infinite(Request $request)
     {
         $page = $request->get('page', 1);
@@ -182,9 +167,6 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * Search posts.
-     */
     public function search(Request $request)
     {
         $query = $request->get('q', '');
@@ -215,9 +197,6 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * Generate pagination links for easier navigation
-     */
     private function generatePaginationLinks($paginator)
     {
         $links = [];

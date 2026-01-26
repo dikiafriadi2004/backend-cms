@@ -12,9 +12,6 @@ use Illuminate\Http\Request;
 
 class ContentController extends Controller
 {
-    /**
-     * Get published posts with pagination
-     */
     public function posts(Request $request)
     {
         $perPage = $request->get('per_page', 10);
@@ -75,9 +72,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Get single post by slug
-     */
     public function post($slug)
     {
         $post = Post::with(['user', 'category', 'tags'])
@@ -98,9 +92,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Get featured posts
-     */
     public function featuredPosts(Request $request)
     {
         $limit = $request->get('limit', 5);
@@ -122,9 +113,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Get latest posts
-     */
     public function latestPosts(Request $request)
     {
         $limit = $request->get('limit', 5);
@@ -145,9 +133,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Get published pages
-     */
     public function pages()
     {
         $pages = Page::published()
@@ -164,9 +149,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Get single page by slug
-     */
     public function page($slug)
     {
         $page = Page::where('slug', $slug)
@@ -186,9 +168,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Get categories with post count
-     */
     public function categories()
     {
         $categories = Category::withCount(['posts' => function($query) {
@@ -214,9 +193,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Get tags with post count
-     */
     public function tags()
     {
         $tags = Tag::withCount(['posts' => function($query) {
@@ -241,9 +217,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Get menu by location
-     */
     public function menu($location)
     {
         $menu = Menu::with('items')
@@ -282,9 +255,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Search content (posts and pages)
-     */
     public function search(Request $request)
     {
         $query = $request->get('q');
@@ -333,9 +303,6 @@ class ContentController extends Controller
         ]);
     }
 
-    /**
-     * Transform post data
-     */
     private function transformPost($post, $includeContent = false)
     {
         $data = [
@@ -381,9 +348,6 @@ class ContentController extends Controller
         return $data;
     }
 
-    /**
-     * Transform page data
-     */
     private function transformPage($page, $includeContent = false)
     {
         $data = [

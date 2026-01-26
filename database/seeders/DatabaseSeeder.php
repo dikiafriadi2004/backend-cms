@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             SettingSeeder::class,
             MenuSeeder::class,
+            CategoryTagSeeder::class,
+            PageSeeder::class,
+            SimplePostSeeder::class,
         ]);
 
         // Create Super Admin User with secure credentials

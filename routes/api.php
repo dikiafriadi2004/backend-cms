@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\ContactController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -65,6 +66,12 @@ Route::prefix('v1')->group(function () {
         Route::get('/social', [SettingController::class, 'social']);
         Route::get('/company', [SettingController::class, 'company']);
         Route::get('/{key}', [SettingController::class, 'show']);
+    });
+    
+    // Contact API
+    Route::prefix('contact')->group(function () {
+        Route::post('/', [ContactController::class, 'store']);
+        Route::get('/settings', [ContactController::class, 'config']);
     });
     
     // Sitemap API

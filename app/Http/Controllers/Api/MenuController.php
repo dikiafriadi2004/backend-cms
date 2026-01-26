@@ -8,17 +8,18 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    /**
-     * Display a listing of menus.
-     */
     public function index()
     {
         $menus = Menu::with(['items' => function ($query) {
             $query->whereNull('parent_id')
-                ->with(['children' => function ($childQuery) {
-                    $childQuery->orderBy('sort_order');
-                }])
-                ->orderBy('sort_order');
+                ->with([
+                    'children' => function ($childQuery) {
+                        $childQuery->with(['page', 'post'])->orderBy('order');
+                    },
+                    'page',
+                    'post'
+                ])
+                ->orderBy('order');
         }])->get();
 
         return response()->json([
@@ -27,18 +28,19 @@ class MenuController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified menu.
-     */
-    public function show($slug)
+    public function show($location)
     {
-        $menu = Menu::where('slug', $slug)
+        $menu = Menu::where('location', $location)
             ->with(['items' => function ($query) {
                 $query->whereNull('parent_id')
-                    ->with(['children' => function ($childQuery) {
-                        $childQuery->orderBy('sort_order');
-                    }])
-                    ->orderBy('sort_order');
+                    ->with([
+                        'children' => function ($childQuery) {
+                            $childQuery->with(['page', 'post'])->orderBy('order');
+                        },
+                        'page',
+                        'post'
+                    ])
+                    ->orderBy('order');
             }])
             ->first();
 
@@ -55,19 +57,21 @@ class MenuController extends Controller
         ]);
     }
 
-    /**
-     * Get main navigation menu.
-     */
     public function navigation()
     {
-        $menu = Menu::where('slug', 'main-navigation')
-            ->orWhere('name', 'Main Navigation')
+        $menu = Menu::where('location', 'main')
+            ->orWhere('location', 'main-navigation')
+            ->orWhere('location', 'header')
             ->with(['items' => function ($query) {
                 $query->whereNull('parent_id')
-                    ->with(['children' => function ($childQuery) {
-                        $childQuery->orderBy('sort_order');
-                    }])
-                    ->orderBy('sort_order');
+                    ->with([
+                        'children' => function ($childQuery) {
+                            $childQuery->with(['page', 'post'])->orderBy('order');
+                        },
+                        'page',
+                        'post'
+                    ])
+                    ->orderBy('order');
             }])
             ->first();
 
@@ -84,19 +88,20 @@ class MenuController extends Controller
         ]);
     }
 
-    /**
-     * Get footer menu.
-     */
     public function footer()
     {
-        $menu = Menu::where('slug', 'footer-menu')
-            ->orWhere('name', 'Footer Menu')
+        $menu = Menu::where('location', 'footer')
+            ->orWhere('location', 'footer-menu')
             ->with(['items' => function ($query) {
                 $query->whereNull('parent_id')
-                    ->with(['children' => function ($childQuery) {
-                        $childQuery->orderBy('sort_order');
-                    }])
-                    ->orderBy('sort_order');
+                    ->with([
+                        'children' => function ($childQuery) {
+                            $childQuery->with(['page', 'post'])->orderBy('order');
+                        },
+                        'page',
+                        'post'
+                    ])
+                    ->orderBy('order');
             }])
             ->first();
 

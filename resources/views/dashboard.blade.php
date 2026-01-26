@@ -5,13 +5,13 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <section class="py-24 relative">
+        <div class="relative max-w-full mx-auto px-6 sm:px-12 lg:px-20 xl:px-32">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </x-app-layout>

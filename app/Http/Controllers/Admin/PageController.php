@@ -27,7 +27,7 @@ class PageController extends Controller
             $query->where('status', $request->status);
         }
 
-        $pages = $query->latest()->paginate(15);
+        $pages = $query->latest()->paginate(10);
         
         // Get trash count for the tab
         $trashCount = Page::onlyTrashed()->count();

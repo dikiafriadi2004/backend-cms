@@ -17,8 +17,33 @@ class Setting extends Model
     ];
 
     protected $casts = [
-        'value' => 'json',
+        // Remove JSON casting since the field is already JSON in database
+        // and we want to handle the casting manually based on type
     ];
+
+    public function getValueAttribute($value)
+    {
+        // Decode JSON value from database
+        $decoded = json_decode($value, true);
+        
+        // Handle different types
+        switch ($this->type) {
+            case 'boolean':
+                return (bool) $decoded;
+            case 'integer':
+                return (int) $decoded;
+            case 'array':
+                return is_array($decoded) ? $decoded : [];
+            default:
+                return $decoded;
+        }
+    }
+
+    public function setValueAttribute($value)
+    {
+        // Encode value as JSON for storage
+        $this->attributes['value'] = json_encode($value);
+    }
 
     public static function get($key, $default = null)
     {

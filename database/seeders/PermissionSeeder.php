@@ -73,23 +73,41 @@ class PermissionSeeder extends Seeder
             
             // File Manager
             ['name' => 'access filemanager', 'group' => 'filemanager'],
+            
+            // Contacts
+            ['name' => 'view contacts', 'group' => 'contacts'],
+            ['name' => 'reply contacts', 'group' => 'contacts'],
+            ['name' => 'delete contacts', 'group' => 'contacts'],
+            ['name' => 'export contacts', 'group' => 'contacts'],
         ];
 
         // Create permissions
+        $permissionsCreated = 0;
+        $permissionsExisted = 0;
+        
         foreach ($permissions as $permission) {
-            Permission::create($permission);
+            $created = Permission::firstOrCreate(
+                ['name' => $permission['name'], 'guard_name' => 'web'],
+                $permission
+            );
+            
+            if ($created->wasRecentlyCreated) {
+                $permissionsCreated++;
+            } else {
+                $permissionsExisted++;
+            }
         }
 
         // Create roles
-        $superAdmin = Role::create(['name' => 'Super Admin']);
-        $admin = Role::create(['name' => 'Admin']);
-        $editor = Role::create(['name' => 'Editor']);
-        $author = Role::create(['name' => 'Author']);
+        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
+        $admin = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
+        $editor = Role::firstOrCreate(['name' => 'Editor', 'guard_name' => 'web']);
+        $author = Role::firstOrCreate(['name' => 'Author', 'guard_name' => 'web']);
 
-        // Assign permissions to roles
-        $superAdmin->givePermissionTo(Permission::all());
+        // Assign permissions to roles (sync to avoid duplicates)
+        $superAdmin->syncPermissions(Permission::all());
 
-        $admin->givePermissionTo([
+        $admin->syncPermissions([
             'view dashboard',
             'view posts', 'create posts', 'edit posts', 'delete posts', 'publish posts',
             'view categories', 'create categories', 'edit categories', 'delete categories',
@@ -99,10 +117,11 @@ class PermissionSeeder extends Seeder
             'view users', 'create users', 'edit users',
             'view settings', 'edit settings',
             'view ads', 'create ads', 'edit ads', 'delete ads',
+            'view contacts', 'reply contacts', 'delete contacts', 'export contacts',
             'access filemanager'
         ]);
 
-        $editor->givePermissionTo([
+        $editor->syncPermissions([
             'view dashboard',
             'view posts', 'create posts', 'edit posts', 'publish posts',
             'view categories', 'create categories', 'edit categories',
@@ -111,12 +130,16 @@ class PermissionSeeder extends Seeder
             'access filemanager'
         ]);
 
-        $author->givePermissionTo([
+        $author->syncPermissions([
             'view dashboard',
             'view posts', 'create posts', 'edit posts',
             'view categories',
             'view tags',
             'access filemanager'
         ]);
+
+        $this->command->info("✅ Permissions: {$permissionsCreated} created, {$permissionsExisted} already existed");
+        $this->command->info('✅ Roles: Super Admin, Admin, Editor, Author configured');
+        $this->command->info('✅ Permission assignments completed');
     }
 }

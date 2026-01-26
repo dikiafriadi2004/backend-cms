@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('roles')->latest()->paginate(15);
+        $users = User::with('roles')->latest()->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
@@ -46,7 +46,8 @@ class UserController extends Controller
         // Handle avatar upload
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->update(['avatar' => $avatarPath]);
+            $avatarUrl = url('storage/' . $avatarPath);
+            $user->update(['avatar' => $avatarUrl]);
         }
 
         // Assign roles
@@ -101,7 +102,8 @@ class UserController extends Controller
         // Handle avatar upload
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->update(['avatar' => $avatarPath]);
+            $avatarUrl = url('storage/' . $avatarPath);
+            $user->update(['avatar' => $avatarUrl]);
         }
 
         // Sync roles

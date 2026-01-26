@@ -30,6 +30,10 @@ class Page extends Model implements HasMedia
         'user_id'
     ];
 
+    protected $appends = [
+        'featured_image'
+    ];
+
     protected $casts = [
         'show_in_menu' => 'boolean',
         'is_homepage' => 'boolean',
@@ -69,5 +73,37 @@ class Page extends Model implements HasMedia
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
+    }
+
+    public function getThumbnailUrlAttribute()
+    {
+        $media = $this->getFirstMedia('thumbnail');
+        if (!$media) {
+            return null;
+        }
+        
+        // Use the media's file path relative to storage/app/public
+        $pathGenerator = app(config('media-library.path_generator'));
+        $directory = $pathGenerator->getPath($media);
+        $relativePath = $directory . $media->file_name;
+        
+        // Generate full URL using asset() helper
+        return asset('storage/' . $relativePath);
+    }
+
+    public function getFeaturedImageAttribute()
+    {
+        $media = $this->getFirstMedia('thumbnail');
+        if (!$media) {
+            return null;
+        }
+        
+        // Use the media's file path relative to storage/app/public
+        $pathGenerator = app(config('media-library.path_generator'));
+        $directory = $pathGenerator->getPath($media);
+        $relativePath = $directory . $media->file_name;
+        
+        // Generate full URL using asset() helper
+        return asset('storage/' . $relativePath);
     }
 }

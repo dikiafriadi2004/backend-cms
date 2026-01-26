@@ -109,6 +109,7 @@
                             <label for="template" class="form-label">Page Template</label>
                             <select id="template" name="template" class="form-select">
                                 <option value="default" {{ old('template', $page->template) == 'default' ? 'selected' : '' }}>Default</option>
+                                <option value="blog" {{ old('template', $page->template) == 'blog' ? 'selected' : '' }}>Blog/Posts</option>
                                 <option value="contact" {{ old('template', $page->template) == 'contact' ? 'selected' : '' }}>Contact</option>
                                 <option value="about" {{ old('template', $page->template) == 'about' ? 'selected' : '' }}>About</option>
                                 <option value="services" {{ old('template', $page->template) == 'services' ? 'selected' : '' }}>Services</option>
@@ -157,7 +158,7 @@
                         @if($page->getFirstMediaUrl('thumbnail'))
                             <div class="mb-4">
                                 <div class="relative inline-block">
-                                    <img src="{{ $page->getFirstMediaUrl('thumbnail', 'thumb') }}" alt="Current thumbnail" class="max-w-full h-32 object-cover rounded">
+                                    <img src="{{ $page->getFirstMediaUrl('thumbnail') }}" alt="Current thumbnail" class="max-w-full h-32 object-cover rounded">
                                     <button type="button" id="remove-current-thumbnail" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
                                         ×
                                     </button>

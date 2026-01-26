@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
-    /**
-     * Get company profile information
-     */
     public function profile()
     {
         $settings = Setting::where('group', 'company')->pluck('value', 'key');
@@ -76,9 +73,6 @@ class CompanyController extends Controller
         ]);
     }
 
-    /**
-     * Get general site settings
-     */
     public function siteSettings()
     {
         $generalSettings = Setting::where('group', 'general')->pluck('value', 'key');
@@ -116,9 +110,6 @@ class CompanyController extends Controller
         ]);
     }
 
-    /**
-     * Get WhatsApp link with pre-filled message
-     */
     public function whatsappLink(Request $request)
     {
         $settings = Setting::where('group', 'company')->pluck('value', 'key');
@@ -151,9 +142,6 @@ class CompanyController extends Controller
         ]);
     }
 
-    /**
-     * Get company statistics for counters
-     */
     public function statistics()
     {
         $settings = Setting::where('group', 'company')->pluck('value', 'key');
@@ -172,9 +160,6 @@ class CompanyController extends Controller
         ]);
     }
 
-    /**
-     * Helper method to get full image URL
-     */
     private function getImageUrl($imagePath)
     {
         if (!$imagePath) {
@@ -188,9 +173,6 @@ class CompanyController extends Controller
         return Storage::url($imagePath);
     }
 
-    /**
-     * Helper method to parse list data (comma or newline separated)
-     */
     private function parseListData($data)
     {
         if (!$data) {

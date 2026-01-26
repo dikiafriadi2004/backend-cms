@@ -22,3 +22,45 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Cache files
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/debugbar/*
+!/storage/debugbar/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/bootstrap/cache/*.php
+
+# Development files
+comprehensive-test.php
+test-*.php
+*-test.html
+*_SUMMARY.md
+*_DOCUMENTATION_COMPLETE.md
+API_*_COMMANDS.sh
+API_DOCUMENTATION.md
+
+# Swagger/API Documentation
+/public/docs/
+/storage/api-docs/
+resources/views/swagger-ui.blade.php
+config/l5-swagger.php
+
+# Postman files
+*.postman_collection.json
+*.postman_environment.json
+
+# Build files
+/public/build/
+
+# Security files
+.htpasswd
+*.key
+*.pem
+*.crt
+auth.json

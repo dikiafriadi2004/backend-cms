@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    /**
-     * Display a listing of published pages.
-     */
     public function index()
     {
         $pages = Page::with(['user:id,name'])
@@ -24,9 +21,6 @@ class PageController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified page.
-     */
     public function show($slug)
     {
         $page = Page::with(['user:id,name'])
@@ -47,9 +41,6 @@ class PageController extends Controller
         ]);
     }
 
-    /**
-     * Get homepage.
-     */
     public function homepage()
     {
         $page = Page::with(['user:id,name'])
@@ -70,9 +61,6 @@ class PageController extends Controller
         ]);
     }
 
-    /**
-     * Get pages for menu.
-     */
     public function menu()
     {
         $pages = Page::select(['id', 'title', 'slug'])

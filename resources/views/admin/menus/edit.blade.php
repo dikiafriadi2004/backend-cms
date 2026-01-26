@@ -83,22 +83,82 @@
                             <select id="type" name="type" class="form-select" required>
                                 <option value="custom">Custom Link</option>
                                 <option value="page">Page</option>
+                                <option value="post">Post</option>
+                                <option value="blog">Blog/Posts</option>
                             </select>
                         </div>
                         
                         <div class="form-group" id="url-field">
                             <label for="url" class="form-label">URL *</label>
-                            <input type="text" id="url" name="url" class="form-input" placeholder="https://example.com">
+                            <input type="text" id="url" name="url" class="form-input" placeholder="https://example.com or / for home page">
+                            <p class="text-xs text-gray-500 mt-1">Enter a full URL or "/" for the home page</p>
                         </div>
                         
                         <div class="form-group" id="page-field" style="display: none;">
                             <label for="page_id" class="form-label">Page *</label>
                             <select id="page_id" name="page_id" class="form-select">
                                 <option value="">Select Page</option>
-                                @foreach($pages as $page)
-                                    <option value="{{ $page->id }}">{{ $page->title }}</option>
-                                @endforeach
+                                @if(isset($pages) && $pages->count() > 0)
+                                    @foreach($pages as $page)
+                                        <option value="{{ $page->id }}">{{ $page->title }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="" disabled>No pages available</option>
+                                @endif
                             </select>
+                            @if(isset($pages))
+                                <p class="text-xs text-gray-500 mt-1">{{ $pages->count() }} pages available</p>
+                            @endif
+                        </div>
+                        
+                        <div class="form-group" id="post-field" style="display: none;">
+                            <label for="post_id" class="form-label">Post *</label>
+                            <select id="post_id" name="post_id" class="form-select">
+                                <option value="">Select Post</option>
+                                @if(isset($posts) && $posts->count() > 0)
+                                    @foreach($posts as $post)
+                                        <option value="{{ $post->id }}">{{ $post->title }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="" disabled>No posts available</option>
+                                @endif
+                            </select>
+                            @if(isset($posts))
+                                <p class="text-xs text-gray-500 mt-1">{{ $posts->count() }} posts available</p>
+                            @endif
+                        </div>
+                        
+                        <div class="form-group" id="blog-field" style="display: none;">
+                            <label for="blog_type" class="form-label">Blog Type *</label>
+                            <select id="blog_type" name="blog_type" class="form-select">
+                                <option value="blog_home">Blog Home</option>
+                                <option value="blog_category">Category</option>
+                                <option value="blog_tag">Tag</option>
+                            </select>
+                            <div id="blog-category-field" style="display: none;" class="mt-3">
+                                <label for="blog_category" class="form-label">Select Category</label>
+                                <select id="blog_category" name="blog_category" class="form-select">
+                                    <option value="">Select Category</option>
+                                    @php
+                                        $categories = \App\Models\Category::orderBy('name')->get();
+                                    @endphp
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->slug }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div id="blog-tag-field" style="display: none;" class="mt-3">
+                                <label for="blog_tag" class="form-label">Select Tag</label>
+                                <select id="blog_tag" name="blog_tag" class="form-select">
+                                    <option value="">Select Tag</option>
+                                    @php
+                                        $tags = \App\Models\Tag::orderBy('name')->get();
+                                    @endphp
+                                    @foreach($tags as $tag)
+                                        <option value="{{ $tag->slug }}">{{ $tag->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-4">
@@ -116,7 +176,7 @@
                             </div>
                         </div>
                         
-                        <button type="submit" class="btn btn-success w-full">
+                        <button type="submit" class="btn btn-success w-full" onclick="return validateForm()">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
@@ -165,6 +225,14 @@
                                                     <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                     </svg>
+                                                @elseif($item->type === 'post')
+                                                    <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                                    </svg>
+                                                @elseif($item->type === 'blog')
+                                                    <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14-7l2 2-2 2m2-2H9m10 0V9M5 19l2-2m-2 2l2-2m-2 2V9"></path>
+                                                    </svg>
                                                 @else
                                                     <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
@@ -176,6 +244,12 @@
                                                 @if($item->type === 'page' && $item->page)
                                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mr-2">Page</span>
                                                     {{ $item->page->title }}
+                                                @elseif($item->type === 'post' && $item->post)
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800 mr-2">Post</span>
+                                                    {{ $item->post->title }}
+                                                @elseif($item->type === 'blog')
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 mr-2">Blog</span>
+                                                    {{ $item->url }}
                                                 @else
                                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-2">Link</span>
                                                     {{ $item->url }}
@@ -217,6 +291,14 @@
                                                                     <svg class="w-3 h-3 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                                     </svg>
+                                                                @elseif($child->type === 'post')
+                                                                    <svg class="w-3 h-3 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                                                    </svg>
+                                                                @elseif($child->type === 'blog')
+                                                                    <svg class="w-3 h-3 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14-7l2 2-2 2m2-2H9m10 0V9M5 19l2-2m-2 2l2-2m-2 2V9"></path>
+                                                                    </svg>
                                                                 @else
                                                                     <svg class="w-3 h-3 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
@@ -228,6 +310,12 @@
                                                                 @if($child->type === 'page' && $child->page)
                                                                     <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mr-1">Page</span>
                                                                     {{ $child->page->title }}
+                                                                @elseif($child->type === 'post' && $child->post)
+                                                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800 mr-1">Post</span>
+                                                                    {{ $child->post->title }}
+                                                                @elseif($child->type === 'blog')
+                                                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 mr-1">Blog</span>
+                                                                    {{ $child->url }}
                                                                 @else
                                                                     <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1">Link</span>
                                                                     {{ $child->url }}
@@ -277,22 +365,59 @@ document.addEventListener('DOMContentLoaded', function() {
     const typeSelect = document.getElementById('type');
     const urlField = document.getElementById('url-field');
     const pageField = document.getElementById('page-field');
+    const postField = document.getElementById('post-field');
+    const blogField = document.getElementById('blog-field');
     const urlInput = document.getElementById('url');
     const pageInput = document.getElementById('page_id');
+    const postInput = document.getElementById('post_id');
+    const blogTypeSelect = document.getElementById('blog_type');
+    const blogCategoryField = document.getElementById('blog-category-field');
+    const blogTagField = document.getElementById('blog-tag-field');
     
     typeSelect.addEventListener('change', function() {
+        // Hide all fields first
+        urlField.style.display = 'none';
+        pageField.style.display = 'none';
+        postField.style.display = 'none';
+        blogField.style.display = 'none';
+        
+        // Remove all required attributes and clear values
+        urlInput.removeAttribute('required');
+        pageInput.removeAttribute('required');
+        postInput.removeAttribute('required');
+        
+        // Clear values for hidden fields to prevent validation errors
+        urlInput.value = '';
+        pageInput.value = '';
+        postInput.value = '';
+        
         if (this.value === 'page') {
-            urlField.style.display = 'none';
             pageField.style.display = 'block';
-            urlInput.removeAttribute('required');
             pageInput.setAttribute('required', 'required');
-        } else {
+        } else if (this.value === 'post') {
+            postField.style.display = 'block';
+            postInput.setAttribute('required', 'required');
+        } else if (this.value === 'blog') {
+            blogField.style.display = 'block';
+        } else if (this.value === 'custom') {
             urlField.style.display = 'block';
-            pageField.style.display = 'none';
             urlInput.setAttribute('required', 'required');
-            pageInput.removeAttribute('required');
         }
     });
+    
+    // Blog type field toggling
+    if (blogTypeSelect) {
+        blogTypeSelect.addEventListener('change', function() {
+            blogCategoryField.style.display = 'none';
+            blogTagField.style.display = 'none';
+            
+            if (this.value === 'blog_category') {
+                blogCategoryField.style.display = 'block';
+            } else if (this.value === 'blog_tag') {
+                blogTagField.style.display = 'block';
+            }
+        });
+    }
     
     // Initialize drag and drop for menu items
     const menuItemsContainer = document.getElementById('menu-items');
@@ -392,6 +517,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.removeChild(notification);
             }, 300);
         }, 3000);
+    }
+    
+    // Form validation function
+    function validateForm() {
+        const type = typeSelect.value;
+        const title = document.getElementById('title').value.trim();
+        
+        if (!title) {
+            alert('Please enter a title');
+            return false;
+        }
+        
+        if (type === 'page') {
+            const pageId = pageInput.value;
+            if (!pageId) {
+                alert('Please select a page');
+                return false;
+            }
+        } else if (type === 'post') {
+            const postId = postInput.value;
+            if (!postId) {
+                alert('Please select a post');
+                return false;
+            }
+        } else if (type === 'custom') {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('Please enter a URL');
+                return false;
+            }
+        } else if (type === 'blog') {
+            const blogType = blogTypeSelect.value;
+            if (!blogType) {
+                alert('Please select a blog type');
+                return false;
+            }
+            if (blogType === 'blog_category') {
+                const category = document.getElementById('blog_category').value;
+                if (!category) {
+                    alert('Please select a category');
+                    return false;
+                }
+            } else if (blogType === 'blog_tag') {
+                const tag = document.getElementById('blog_tag').value;
+                if (!tag) {
+                    alert('Please select a tag');
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 });
 </script>

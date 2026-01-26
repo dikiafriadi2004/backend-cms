@@ -37,9 +37,11 @@ class MenuController extends Controller
 
     public function edit(Menu $menu)
     {
-        $menu->load(['parentItems.children', 'parentItems.page']);
+        $menu->load(['parentItems.children', 'parentItems.page', 'parentItems.post']);
         $pages = Page::published()->get();
-        return view('admin.menus.edit', compact('menu', 'pages'));
+        $posts = \App\Models\Post::published()->orderBy('title')->get();
+        
+        return view('admin.menus.edit', compact('menu', 'pages', 'posts'));
     }
 
     public function update(Request $request, Menu $menu)
@@ -65,26 +67,92 @@ class MenuController extends Controller
 
     public function addItem(Request $request, Menu $menu)
     {
-        $request->validate([
+        // Custom validation with better error handling
+        $rules = [
             'title' => 'required|max:255',
-            'type' => 'required|in:page,custom,category,post',
-            'url' => 'required_if:type,custom',
-            'page_id' => 'required_if:type,page|exists:pages,id',
-            'parent_id' => 'nullable|exists:menu_items,id',
+            'type' => 'required|in:page,custom,category,post,blog',
             'target' => 'required|in:_self,_blank',
-            'css_class' => 'nullable|max:255'
-        ]);
+            'css_class' => 'nullable|max:255',
+            'parent_id' => 'nullable|exists:menu_items,id',
+        ];
+
+        // Add conditional rules based on type
+        if ($request->type === 'custom') {
+            // Allow "/" for home page, relative paths starting with "/", or valid URLs
+            $rules['url'] = [
+                'required',
+                function ($attribute, $value, $fail) {
+                    // Allow "/" for home page
+                    if ($value === '/') {
+                        return;
+                    }
+                    
+                    // Allow relative paths starting with "/"
+                    if (str_starts_with($value, '/') && strlen($value) > 1) {
+                        return;
+                    }
+                    
+                    // Allow valid URLs
+                    if (filter_var($value, FILTER_VALIDATE_URL)) {
+                        return;
+                    }
+                    
+                    $fail('The ' . $attribute . ' field must be a valid URL, "/" for home page, or a path starting with "/".');
+                }
+            ];
+        } elseif ($request->type === 'page') {
+            $rules['page_id'] = 'required|exists:pages,id';
+        } elseif ($request->type === 'post') {
+            $rules['post_id'] = 'required|exists:posts,id';
+        } elseif ($request->type === 'blog') {
+            $rules['blog_type'] = 'required|in:blog_home,blog_category,blog_tag';
+            if ($request->blog_type === 'blog_category') {
+                $rules['blog_category'] = 'required';
+            } elseif ($request->blog_type === 'blog_tag') {
+                $rules['blog_tag'] = 'required';
+            }
+        }
+
+        $request->validate($rules);
 
         $order = MenuItem::where('menu_id', $menu->id)
             ->where('parent_id', $request->parent_id)
             ->max('order') + 1;
 
+        // Generate URL based on type
+        $url = $request->url ?? '';
+        if ($request->type === 'blog') {
+            switch ($request->blog_type) {
+                case 'blog_home':
+                    $url = '/blog';
+                    break;
+                case 'blog_category':
+                    $url = '/blog/category/' . $request->blog_category;
+                    break;
+                case 'blog_tag':
+                    $url = '/blog/tag/' . $request->blog_tag;
+                    break;
+            }
+        } elseif ($request->type === 'post') {
+            $post = \App\Models\Post::find($request->post_id);
+            if ($post) {
+                $url = '/blog/' . $post->slug;
+            }
+        } elseif ($request->type === 'page') {
+            $page = \App\Models\Page::find($request->page_id);
+            if ($page) {
+                // Generate frontend-compatible URL for pages
+                $url = '/' . $page->slug;
+            }
+        }
+
         MenuItem::create([
             'menu_id' => $menu->id,
             'title' => $request->title,
             'type' => $request->type,
-            'url' => $request->url,
-            'page_id' => $request->page_id,
+            'url' => $url,
+            'page_id' => $request->type === 'page' ? $request->page_id : null,
+            'post_id' => $request->type === 'post' ? $request->post_id : null,
             'parent_id' => $request->parent_id,
             'target' => $request->target,
             'css_class' => $request->css_class,

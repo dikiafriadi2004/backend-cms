@@ -211,7 +211,7 @@
                         @if($post->getFirstMediaUrl('thumbnail'))
                             <div class="mb-4">
                                 <div class="relative inline-block">
-                                    <img src="{{ $post->getFirstMediaUrl('thumbnail', 'thumb') }}" alt="Current thumbnail" class="max-w-full h-32 object-cover rounded">
+                                    <img src="{{ $post->getFirstMediaUrl('thumbnail') }}" alt="Current thumbnail" class="max-w-full h-32 object-cover rounded">
                                     <button type="button" id="remove-current-thumbnail" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
                                         ×
                                     </button>

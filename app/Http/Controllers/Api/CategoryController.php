@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of categories.
-     */
     public function index()
     {
         $categories = Category::withCount('posts')
@@ -23,9 +20,6 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified category.
-     */
     public function show($slug)
     {
         $category = Category::where('slug', $slug)
@@ -45,9 +39,6 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
-     * Get category posts.
-     */
     public function posts($slug, Request $request)
     {
         $category = Category::where('slug', $slug)->first();

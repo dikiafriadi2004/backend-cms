@@ -10,7 +10,7 @@ class AdSpaceController extends Controller
 {
     public function index()
     {
-        $adSpaces = AdSpace::latest()->paginate(15);
+        $adSpaces = AdSpace::latest()->paginate(10);
         return view('admin.ads.index', compact('adSpaces'));
     }
 
