@@ -110,6 +110,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Ad Spaces Management
     Route::resource('ads', AdSpaceController::class)->except(['show']);
     Route::patch('ads/{ad}/toggle', [AdSpaceController::class, 'toggle'])->name('ads.toggle');
+    Route::get('ads/{ad}/analytics', [AdSpaceController::class, 'analytics'])->name('ads.analytics');
     
     // Contact Management
     Route::resource('contacts', ContactController::class)->only(['index', 'show', 'store', 'update', 'destroy']);

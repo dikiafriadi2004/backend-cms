@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\AdController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -72,6 +73,15 @@ Route::prefix('v1')->group(function () {
     Route::prefix('contact')->group(function () {
         Route::post('/', [ContactController::class, 'store']);
         Route::get('/settings', [ContactController::class, 'config']);
+    });
+    
+    // Ads API
+    Route::prefix('ads')->group(function () {
+        Route::get('/', [AdController::class, 'index']);
+        Route::get('/positions', [AdController::class, 'positions']);
+        Route::get('/position/{position}', [AdController::class, 'position']);
+        Route::post('/{id}/click', [AdController::class, 'click']);
+        Route::get('/{id}/analytics', [AdController::class, 'analytics']);
     });
     
     // Sitemap API

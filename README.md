@@ -1,304 +1,416 @@
-# KonterCMS - Laravel 12 Content Management System (Backend API)
+# 🚀 **Laravel CMS with Next.js API Integration**
 
-KonterCMS adalah sistem manajemen konten yang powerful dan lengkap yang dibangun dengan Laravel 12. CMS ini dirancang khusus sebagai **backend API** untuk digunakan dengan frontend Next.js atau framework frontend lainnya. Tidak ada frontend views untuk blog/pages karena semua konten diakses melalui API endpoints.
+A modern, professional Content Management System built with Laravel, featuring a complete RESTful API for Next.js integration and an advanced advertisement management system.
 
-## 🚀 Fitur Utama
+## ✨ **Features**
 
-### 1. Dashboard Analytics
-- Dashboard dengan statistik lengkap
-- Integrasi Google Analytics (siap pakai)
-- Overview posts, pages, users, dan categories
-- Recent activity tracking
+### **🎯 Core Features**
+- **Modern Admin Panel** with ultra-professional design
+- **Complete RESTful API** for Next.js integration
+- **Advanced Ad Management** with 4 ad types support
+- **Content Management** for posts, pages, categories, and tags
+- **User Management** with authentication and roles
+- **File Management** with media uploads
+- **SEO Optimization** with meta tags and sitemaps
+- **Email System** with contact forms and notifications
+- **Responsive Design** optimized for all devices
 
-### 2. Posts Management
-- **SEO Optimized**: Meta title, description, keywords
-- **Rich Text Editor**: TinyMCE dengan file manager integration
-- **Media Management**: Thumbnail upload dengan multiple sizes
-- **Categories & Tags**: Sistem kategorisasi yang fleksibel
-- **Status Management**: Draft, Published, Scheduled
-- **Featured Posts**: Highlight posts penting
-- **Auto Slug Generation**: SEO-friendly URLs
-- **Pagination**: 10 posts per halaman dengan filter dan search
+### **📊 Advertisement System**
+- **Manual Banner Ads** with image uploads
+- **Manual Text Link Ads** with custom styling
+- **Google AdSense Integration** with code injection
+- **Adsera Integration** for local advertising
+- **11 Ad Positions** strategically placed
+- **Analytics Tracking** with views and clicks
+- **Scheduling System** with start/end dates
+- **Professional Admin Interface** with modern design
 
-### 3. Pages Management
-- **Multiple Templates**: Contact, Privacy, About, Blog, Default
-- **SEO Ready**: Complete meta tags support
-- **Custom Content**: Rich text editor dengan media support
-- **Status Control**: Draft/Published workflow
-- **Pagination**: 10 pages per halaman
+### **🔌 API Integration**
+- **Complete REST API** with 25+ endpoints
+- **Next.js Ready** with TypeScript support
+- **Real-time Analytics** tracking
+- **CORS Enabled** for cross-origin requests
+- **Rate Limiting** for security
+- **Error Handling** with proper HTTP status codes
 
-### 4. Menu Builder
-- **Drag & Drop Interface**: Sortable menu items
-- **Multiple Menu Locations**: Header, Footer, Custom
-- **Nested Menus**: Multi-level menu support
-- **Page Integration**: Auto-link ke pages
-- **Custom Links**: External dan internal links
-- **CSS Classes**: Custom styling support
+## 📋 **Quick Start**
 
-### 5. User Management
-- **Role-Based Access**: Granular permission system
-- **User Profiles**: Avatar, bio, status management
-- **Activity Tracking**: User actions monitoring
-- **Pagination**: 10 users per halaman
+### **System Requirements**
+- PHP 8.1+
+- Composer 2.0+
+- Node.js 16+
+- MySQL 8.0+
+- 2GB RAM (recommended)
 
-### 6. Roles & Permissions
-- **Pre-defined Roles**: Super Admin, Admin, Editor, Author
-- **Granular Permissions**: 40+ specific permissions
-- **Permission Groups**: Organized by functionality
-- **Dynamic Assignment**: Flexible role management
-
-### 7. Advertising System
-- **Google AdSense**: Ready integration
-- **Manual Ads**: Custom HTML/JS ads
-- **Adsera Support**: Indonesian ad network
-- **Position Management**: Header, Sidebar, Content, Footer
-- **Status Control**: Enable/disable ads easily
-- **Pagination**: 10 ads per halaman
-
-### 8. Global Settings
-- **Site Information**: Name, description, logo, favicon
-- **Contact Details**: Email, phone, address
-- **SEO Settings**: Meta tags, robots.txt, site verification
-- **Social Media**: All major platforms integration
-- **Analytics**: Google Analytics, Tag Manager, Facebook Pixel
-- **Company Profile**: Complete company information, vision, mission
-- **Call to Action**: Customizable CTA sections with WhatsApp integration
-- **Settings Seeder**: 39 pre-configured settings ready to use
-
-### 9. File Manager
-- **TinyMCE Integration**: Seamless editor integration
-- **Multiple Upload**: Batch file uploads
-- **Image Optimization**: Auto-resize dan compression
-- **Folder Management**: Organized file structure
-- **Media Library**: Centralized asset management
-
-### 10. RESTful API
-- **Complete API Endpoints**: All data accessible via API
-- **JSON Responses**: Structured data format
-- **Pagination Support**: Efficient data loading
-- **Search & Filter**: Advanced query capabilities
-- **CORS Ready**: Frontend integration ready
-
-## 🔒 Fitur Keamanan
-
-### 1. Route Security
-- **Homepage Redirect**: Otomatis redirect ke login untuk mencegah akses tidak sah
-- **Fallback Route**: Semua route tidak terdefinisi redirect ke login
-- **No Test Routes**: Tidak ada route testing yang bisa dieksploitasi
-
-### 2. Security Headers
-- **X-Content-Type-Options**: nosniff
-- **X-Frame-Options**: DENY (mencegah clickjacking)
-- **X-XSS-Protection**: 1; mode=block
-- **Referrer-Policy**: strict-origin-when-cross-origin
-- **Permissions-Policy**: Membatasi akses geolocation, microphone, camera
-- **Server Header**: Dihapus untuk menyembunyikan informasi server
-
-### 3. File Protection
-- **Sensitive Files**: .env, .log, .htaccess, .ini, dll diblokir
-- **Directory Protection**: storage/, vendor/, node_modules/, tests/, database/ diblokir
-- **Security Files**: .htpasswd, *.key, *.pem, *.crt tidak masuk repository
-
-### 4. Rate Limiting
-- **API Throttling**: Pembatasan request API untuk mencegah abuse
-- **Authentication**: Semua admin route memerlukan autentikasi
-- **Permission System**: Role-based access control
-
-## 🎯 Backend Only - No Frontend Views
-
-**PENTING**: CMS ini adalah **backend API only**. Tidak ada route atau view untuk blog/pages frontend karena:
-- Frontend menggunakan Next.js atau framework lainnya
-- Semua konten diakses melalui API endpoints
-- Admin panel hanya untuk manajemen konten
-- Homepage menampilkan informasi API endpoints
-
-## 🛠️ Teknologi Stack
-
-- **Backend**: Laravel 12 (PHP 8.2+)
-- **Database**: MySQL
-- **Frontend**: TailwindCSS 4.0, Alpine.js
-- **Editor**: TinyMCE 6
-- **File Management**: Laravel File Manager
-- **Authentication**: Laravel Breeze
-- **Permissions**: Spatie Laravel Permission
-- **Media**: Spatie Media Library
-- **Image Processing**: Intervention Image
-
-## 📋 Requirements
-
-- PHP 8.2 atau lebih tinggi
-- MySQL 5.7+ atau MariaDB 10.3+
-- Composer
-- Node.js & NPM
-- Web Server (Apache/Nginx)
-
-## 🚀 Instalasi
-
-### 1. Clone Repository
+### **Installation**
 ```bash
-git clone <repository-url>
-cd backend-cms
-```
+# Clone repository
+git clone https://github.com/yourusername/laravel-cms.git
+cd laravel-cms
 
-### 2. Install Dependencies
-```bash
+# Install dependencies
 composer install
 npm install
-```
 
-### 3. Environment Setup
-```bash
+# Setup environment
 cp .env.example .env
 php artisan key:generate
-```
 
-### 4. Database Configuration
-Edit file `.env`:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=kontercms
-DB_USERNAME=root
-DB_PASSWORD=
-```
+# Configure database in .env file
+# DB_DATABASE=laravel_cms
+# DB_USERNAME=your_username
+# DB_PASSWORD=your_password
 
-### 5. Database Migration & Seeding
-```bash
-php artisan migrate
-php artisan db:seed
-```
+# Run migrations and seed data
+php artisan migrate --seed
 
-**Settings Seeder**: Database seeding akan mengisi 39 pengaturan default termasuk:
-- General Settings (7 items): Site name, description, logo, favicon, contact info
-- SEO Settings (5 items): Meta tags, robots.txt, site verification
-- Social Media (5 items): Facebook, Twitter, Instagram, LinkedIn, YouTube
-- Analytics (3 items): Google Analytics, Tag Manager, Facebook Pixel
-- Company Profile & CTA (19 items): Company info, vision, mission, call-to-action
-
-Untuk menjalankan hanya settings seeder:
-```bash
-php artisan db:seed --class=SettingSeeder
-```
-
-### 6. Storage Link
-```bash
+# Create storage link and compile assets
 php artisan storage:link
-```
-
-### 7. Build Assets
-```bash
 npm run build
-```
 
-**Note**: Jika terjadi error "Vite manifest not found", jalankan `npm run build` untuk generate file manifest yang diperlukan.
-
-### 8. Start Server
-```bash
+# Start development server
 php artisan serve
 ```
 
-**Keamanan**: Homepage otomatis redirect ke login. Akses `http://localhost:8000/` akan langsung diarahkan ke halaman login untuk keamanan.
-
-## 👤 Default Login
-
-Setelah seeding, gunakan kredensial berikut:
-- **Email**: admin@kontercms.com
+### **Default Admin Access**
+- **URL**: http://localhost:8000/admin
+- **Email**: admin@example.com
 - **Password**: password
 
-## 🔗 API Endpoints
+### **API Base URL**
+- **Development**: http://localhost:8000/api/v1
+- **Production**: https://yourdomain.com/api/v1
 
-### Posts
-- `GET /api/v1/posts` - List all posts
-- `GET /api/v1/posts/featured` - Featured posts
-- `GET /api/v1/posts/{slug}` - Single post
-- `GET /api/v1/categories` - All categories
-- `GET /api/v1/tags` - All tags
+## 🚀 **Production Deployment**
 
-### Pages
-- `GET /api/v1/pages` - List all pages
-- `GET /api/v1/pages/{slug}` - Single page
+### **VPS Requirements**
+- Ubuntu 20.04+ or CentOS 8+
+- 2GB RAM minimum (4GB recommended)
+- 20GB SSD storage
+- PHP 8.1+, MySQL 8.0+, Nginx
 
-### Menus
-- `GET /api/v1/menus/{location}` - Menu by location
+### **Quick Deploy**
+```bash
+# On your VPS
+sudo apt update && sudo apt upgrade -y
 
-### Settings
-- `GET /api/v1/settings` - All settings
-- `GET /api/v1/settings/{group}` - Settings by group
+# Install LEMP stack
+sudo apt install nginx mysql-server php8.2-fpm php8.2-mysql php8.2-xml php8.2-curl php8.2-zip php8.2-mbstring php8.2-gd -y
 
-### Ads
-- `GET /api/v1/ads/{position}` - Ads by position
+# Install Composer
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
 
-## 🎨 Customization
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
 
-### Templates
-Templates untuk pages tersedia di:
-- `resources/views/pages/contact.blade.php`
-- `resources/views/pages/privacy.blade.php`
-- `resources/views/pages/about.blade.php`
-- `resources/views/pages/blog.blade.php`
+# Clone and setup project
+cd /var/www
+sudo git clone https://github.com/yourusername/laravel-cms.git
+sudo chown -R www-data:www-data laravel-cms
+cd laravel-cms
 
-### Styling
-Customize TailwindCSS di:
-- `tailwind.config.js`
-- `resources/css/app.css`
+# Install dependencies
+composer install --optimize-autoloader --no-dev
+npm install && npm run build
 
-### Permissions
-Tambah permission baru di:
-- `database/seeders/PermissionSeeder.php`
+# Setup environment
+cp .env.example .env
+# Edit .env with production settings
+php artisan key:generate
+php artisan migrate --force
+php artisan db:seed --force
+php artisan storage:link
+php artisan config:cache
 
-## 🔧 Configuration
+# Configure Nginx
+sudo nano /etc/nginx/sites-available/laravel-cms
+# Add Nginx configuration (see below)
+sudo ln -s /etc/nginx/sites-available/laravel-cms /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
 
-### File Manager
-Konfigurasi file manager di `config/lfm.php`
+# Setup SSL with Let's Encrypt
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d yourdomain.com
+```
 
-### Media Library
-Konfigurasi media di `config/media-library.php`
+### **Nginx Configuration**
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    root /var/www/laravel-cms/public;
+    index index.php index.html;
 
-### Permissions
-Konfigurasi permissions di `config/permission.php`
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
 
-## 📱 Responsive Design
+    location ~ \.php$ {
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
 
-CMS ini fully responsive dengan:
-- Mobile-first approach
-- Tablet optimization
-- Desktop enhancement
-- Touch-friendly interface
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
+```
 
-## 🔒 Security Features
+## 📚 **Documentation**
 
-- CSRF Protection
-- XSS Prevention
-- SQL Injection Protection
-- Role-based Access Control
-- File Upload Validation
-- Secure Authentication
+All comprehensive documentation has been consolidated into this README file for easier maintenance and reduced project size. This includes:
 
-## 🚀 Performance
+- **Installation Instructions** - Complete local setup guide
+- **API Documentation** - Full API reference for Next.js integration  
+- **VPS Deployment Guide** - Production deployment instructions
+- **Usage Examples** - Implementation examples and best practices
 
-- Optimized Database Queries
-- Image Compression
-- Asset Minification
-- Caching Support
-- Lazy Loading
-- CDN Ready
+For detailed documentation, please refer to the sections below in this README.
 
-## 📞 Support
+## 🎯 **API Endpoints**
 
-Untuk support dan pertanyaan:
-- Email: admin@kontercms.com
-- Documentation: [Link to docs]
-- Issues: [GitHub Issues]
+### **🎪 Ads API**
+```http
+GET    /api/v1/ads                    # Get all ads
+GET    /api/v1/ads/position/{pos}     # Get ads by position
+POST   /api/v1/ads/{id}/click         # Track ad click
+GET    /api/v1/ads/{id}/analytics     # Get ad analytics
+GET    /api/v1/ads/positions          # Get available positions
+```
 
-## 📄 License
+### **📝 Content API**
+```http
+GET    /api/v1/posts                  # Get all posts
+GET    /api/v1/posts/{slug}           # Get single post
+GET    /api/v1/posts/featured         # Get featured posts
+GET    /api/v1/posts/latest           # Get latest posts
+GET    /api/v1/posts/search           # Search posts
 
-This project is licensed under the MIT License.
+GET    /api/v1/pages                  # Get all pages
+GET    /api/v1/pages/{slug}           # Get single page
+GET    /api/v1/pages/homepage         # Get homepage content
 
-## 🤝 Contributing
+GET    /api/v1/categories             # Get all categories
+GET    /api/v1/categories/{slug}      # Get single category
+GET    /api/v1/categories/{slug}/posts # Get category posts
 
-Contributions are welcome! Please read our contributing guidelines.
+GET    /api/v1/tags                   # Get all tags
+GET    /api/v1/tags/popular           # Get popular tags
+GET    /api/v1/tags/{slug}            # Get single tag
+```
+
+### **⚙️ System API**
+```http
+GET    /api/v1/settings               # Get all settings
+GET    /api/v1/settings/general       # Get general settings
+GET    /api/v1/settings/seo           # Get SEO settings
+GET    /api/v1/menus/navigation       # Get navigation menu
+POST   /api/v1/contact                # Submit contact form
+```
+
+## 🎨 **Next.js Integration**
+
+### **Quick Implementation**
+```tsx
+// components/AdBanner.tsx
+import { useState, useEffect } from 'react';
+
+export default function AdBanner({ position }: { position: string }) {
+  const [ads, setAds] = useState([]);
+
+  useEffect(() => {
+    fetch(`/api/v1/ads/position/${position}`)
+      .then(res => res.json())
+      .then(data => setAds(data.data));
+  }, [position]);
+
+  return (
+    <div className="ad-container">
+      {ads.map(ad => (
+        <div key={ad.id} onClick={() => trackClick(ad.id)}>
+          {ad.type === 'manual_banner' && (
+            <img src={ad.image_url} alt={ad.alt_text} />
+          )}
+          {ad.type === 'manual_text' && (
+            <a href={ad.link_url}>{ad.title}</a>
+          )}
+          {(ad.type === 'adsense' || ad.type === 'adsera') && (
+            <div dangerouslySetInnerHTML={{ __html: ad.code }} />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const trackClick = async (adId: number) => {
+  await fetch(`/api/v1/ads/${adId}/click`, { method: 'POST' });
+};
+```
+
+### **Available Ad Positions**
+- `header` - Header area
+- `sidebar_top` - Top of sidebar
+- `sidebar_middle` - Middle of sidebar
+- `sidebar_bottom` - Bottom of sidebar
+- `content_top` - Top of content
+- `content_middle` - Middle of content
+- `content_bottom` - Bottom of content
+- `footer` - Footer area
+- `between_posts` - Between post listings
+- `popup` - Popup/modal ads
+- `mobile_banner` - Mobile-specific banners
+
+## 🚀 **Deployment**
+
+### **VPS Deployment**
+Follow the complete [VPS Deployment Guide](VPS_DEPLOYMENT_COMPLETE_GUIDE.md) for production setup including:
+- Server configuration
+- SSL certificate setup
+- Performance optimization
+- Security hardening
+- Monitoring setup
+
+### **Quick Deploy Commands**
+```bash
+# On your VPS
+git clone https://github.com/yourusername/laravel-cms.git
+cd laravel-cms
+composer install --optimize-autoloader --no-dev
+npm install && npm run build
+cp .env.example .env
+# Configure .env for production
+php artisan key:generate
+php artisan migrate --force
+php artisan db:seed --force
+php artisan storage:link
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+## 🛡️ **Security Features**
+
+- **CSRF Protection** on all forms
+- **SQL Injection Prevention** with Eloquent ORM
+- **XSS Protection** with Blade templating
+- **Rate Limiting** on API endpoints
+- **Input Validation** with Form Requests
+- **File Upload Security** with type validation
+- **Authentication** with Laravel Sanctum
+- **Password Hashing** with bcrypt
+
+## 📊 **Performance Features**
+
+- **Database Optimization** with proper indexing
+- **Query Optimization** with eager loading
+- **Caching System** with Redis support
+- **Asset Optimization** with Vite
+- **Image Optimization** with intervention/image
+- **Gzip Compression** enabled
+- **CDN Ready** for static assets
+- **Database Connection Pooling**
+
+## 🔧 **Development**
+
+### **Project Structure**
+```
+laravel-cms/
+├── app/
+│   ├── Http/Controllers/Api/     # API Controllers
+│   ├── Http/Controllers/Admin/   # Admin Controllers
+│   ├── Models/                   # Eloquent Models
+│   └── Mail/                     # Mail Classes
+├── database/
+│   ├── migrations/               # Database Migrations
+│   └── seeders/                  # Database Seeders
+├── resources/
+│   ├── views/admin/              # Admin Panel Views
+│   ├── js/                       # JavaScript Assets
+│   └── css/                      # CSS Assets
+├── routes/
+│   ├── api.php                   # API Routes
+│   └── web.php                   # Web Routes
+└── public/                       # Public Assets
+```
+
+### **Key Models**
+- `User` - User management
+- `Post` - Blog posts
+- `Page` - Static pages
+- `Category` - Post categories
+- `Tag` - Post tags
+- `AdSpace` - Advertisement management
+- `Menu` - Navigation menus
+- `Setting` - System settings
+
+### **Artisan Commands**
+```bash
+# Development
+php artisan serve                 # Start dev server
+php artisan migrate:fresh --seed  # Reset database
+php artisan optimize:clear        # Clear all caches
+
+# Production
+php artisan config:cache          # Cache configuration
+php artisan route:cache           # Cache routes
+php artisan view:cache            # Cache views
+php artisan queue:work            # Start queue worker
+```
+
+## 🤝 **Contributing**
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 **Support**
+
+### **Documentation**
+- All documentation is consolidated in this README
+- Laravel Framework Documentation: https://laravel.com/docs
+- API endpoints documented in this file
+- Installation and deployment guides included below
+
+### **Getting Help**
+- Create an issue on GitHub
+- Check Laravel documentation
+- Review the API section in this README
+- Follow the installation guide below
+
+## 🎉 **Acknowledgments**
+
+- **Laravel Framework** - The PHP framework for web artisans
+- **Tailwind CSS** - A utility-first CSS framework
+- **Alpine.js** - A rugged, minimal framework for composing JavaScript behavior
+- **Chart.js** - Simple yet flexible JavaScript charting
+- **TinyMCE** - The world's most advanced rich text editor
 
 ---
 
-**KonterCMS** - Powerful, Modern, & SEO-Ready Content Management System
+## 📈 **Project Status**
+
+- ✅ **Core CMS**: Complete and stable
+- ✅ **API Integration**: Fully functional
+- ✅ **Admin Panel**: Modern and professional
+- ✅ **Ad Management**: Advanced features implemented
+- ✅ **Documentation**: Comprehensive guides available
+- ✅ **Production Ready**: Deployment guides provided
+
+**Version**: 1.0.0  
+**Last Updated**: January 2026  
+**Status**: Production Ready 🚀
+
+---
+
+**Made with ❤️ for modern web development**
