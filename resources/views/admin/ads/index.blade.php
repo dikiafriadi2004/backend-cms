@@ -208,19 +208,14 @@
                                             </button>
                                         </form>
                                         
-                                        <form action="{{ route('admin.ads.destroy', $ad) }}" 
-                                              method="POST" class="d-inline"
-                                              onsubmit="return confirmDelete('{{ $ad->name }}')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="btn-action btn-delete" 
-                                                    data-bs-toggle="tooltip" 
-                                                    title="Hapus Iklan">
-                                                <i class="fas fa-trash"></i>
-                                                <span class="btn-text">Hapus</span>
-                                            </button>
-                                        </form>
+                                        <button type="button" 
+                                                class="btn-action btn-delete" 
+                                                data-ad-id="{{ $ad->id }}"
+                                                data-ad-name="{{ $ad->name }}"
+                                                title="Hapus Iklan">
+                                            <i class="fas fa-trash"></i>
+                                            <span class="btn-text">Hapus</span>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -287,6 +282,55 @@
                     </a>
                 </div>
             @endif
+        </div>
+    </div>
+</div>
+
+<!-- Clean Minimal Delete Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden modal-overlay">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 modal-content">
+        <!-- Clean Header -->
+        <div class="relative p-6 text-center border-b border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Hapus Iklan</h3>
+            <p class="text-sm text-gray-600">
+                Yakin ingin menghapus iklan <span class="font-medium text-gray-900" id="adName">ini</span>?
+            </p>
+            
+            <!-- Close Button -->
+            <button type="button" id="closeModal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Warning Box -->
+        <div class="p-6">
+            <div class="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                <div class="flex items-start space-x-2">
+                    <svg class="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                    <div>
+                        <p class="text-xs font-medium text-amber-800">Data akan dihapus permanen</p>
+                        <p class="text-xs text-amber-700 mt-1">Termasuk statistik dan riwayat analytics</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex space-x-3">
+                <button type="button" id="cancelDelete" class="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                    Batal
+                </button>
+                <form id="deleteForm" method="POST" class="flex-1">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="w-full px-4 py-2.5 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                        Hapus
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -808,23 +852,92 @@
         gap: 1rem;
     }
 }
+
+/* Elegant Compact Modal Styles */
+.modal-overlay {
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Smooth button interactions */
+.modal-content button {
+    transition: all 0.15s ease-in-out;
+}
+
+.modal-content button:hover {
+    transform: translateY(-1px);
+}
+
+.modal-content button:active {
+    transform: translateY(0);
+}
+
+/* Loading state for submit button */
+.loading-state {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading-state::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced focus states */
+.modal-content button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 1rem;
+        max-width: calc(100vw - 2rem);
+    }
+}
 </style>
 @endpush
 
 @push('scripts')
 <script>
-function confirmDelete(adName) {
-    return confirm(`⚠️ PERINGATAN!\n\nAnda yakin ingin menghapus iklan "${adName}"?\n\nTindakan ini tidak dapat dibatalkan dan akan menghapus:\n• Data iklan\n• Statistik performa\n• Riwayat analytics\n\nKlik OK untuk melanjutkan atau Cancel untuk membatalkan.`);
-}
-
-// Modern search functionality
+// Elegant Compact Modal Functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-    
     // Search functionality
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
@@ -834,14 +947,141 @@ document.addEventListener('DOMContentLoaded', function() {
             
             tableRows.forEach(row => {
                 const text = row.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
             });
         });
     }
+    
+    // Compact Delete Modal
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteForm = document.getElementById('deleteForm');
+    const adNameElement = document.getElementById('adName');
+    const cancelButton = document.getElementById('cancelDelete');
+    const closeButton = document.getElementById('closeModal');
+    
+    // Handle delete button clicks
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-delete')) {
+            const button = e.target.closest('.btn-delete');
+            const adId = button.getAttribute('data-ad-id');
+            const adName = button.getAttribute('data-ad-name');
+            
+            // Update modal content
+            adNameElement.textContent = adName;
+            deleteForm.action = `/admin/ads/${adId}`;
+            
+            // Show modal
+            showModal();
+        }
+    });
+    
+    // Show modal with animation
+    function showModal() {
+        deleteModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        // Focus on cancel button for accessibility
+        setTimeout(() => cancelButton.focus(), 100);
+    }
+    
+    // Close modal with animation
+    function closeModal() {
+        const modalContent = deleteModal.querySelector('.modal-content');
+        modalContent.style.transform = 'scale(0.95) translateY(-10px)';
+        modalContent.style.opacity = '0';
+        
+        setTimeout(() => {
+            deleteModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            
+            // Reset modal content
+            modalContent.style.transform = '';
+            modalContent.style.opacity = '';
+            
+            // Reset form if needed
+            const submitButton = deleteForm.querySelector('button[type="submit"]');
+            if (submitButton.disabled) {
+                resetSubmitButton(submitButton);
+            }
+        }, 150);
+    }
+    
+    // Event listeners
+    if (cancelButton) cancelButton.addEventListener('click', closeModal);
+    if (closeButton) closeButton.addEventListener('click', closeModal);
+    
+    // Close on overlay click
+    deleteModal.addEventListener('click', function(e) {
+        if (e.target === deleteModal) closeModal();
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
+            closeModal();
+        }
+    });
+    
+    // Handle form submission
+    if (deleteForm) {
+        deleteForm.addEventListener('submit', function(e) {
+            const submitButton = this.querySelector('button[type="submit"]');
+            
+            // Show loading state
+            submitButton.disabled = true;
+            submitButton.classList.add('loading-state');
+            submitButton.textContent = 'Menghapus...';
+            
+            // Auto-reset after timeout
+            setTimeout(() => {
+                if (submitButton.disabled) {
+                    resetSubmitButton(submitButton);
+                }
+            }, 5000);
+        });
+    }
+    
+    // Reset submit button
+    function resetSubmitButton(button) {
+        button.disabled = false;
+        button.classList.remove('loading-state');
+        button.textContent = 'Hapus';
+    }
 });
+
+// Simple toast notification
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+    
+    toast.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg text-white text-sm font-medium shadow-lg transform transition-all duration-300 translate-x-full ${bgColor}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Auto remove
+    setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Laravel session messages
+@if(session('success'))
+    document.addEventListener('DOMContentLoaded', function() {
+        showToast('{{ session('success') }}', 'success');
+    });
+@endif
+
+@if(session('error'))
+    document.addEventListener('DOMContentLoaded', function() {
+        showToast('{{ session('error') }}', 'error');
+    });
+@endif
 </script>
 @endpush
