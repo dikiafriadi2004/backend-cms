@@ -566,8 +566,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             
                             <div class="form-group-modern full-width">
                                 <div class="input-wrapper">
-                                    <input type="url" class="form-input" id="link_url" name="link_url">
-                                    <label for="link_url" class="form-label">
+                                    <input type="url" class="form-input" id="banner_link_url" name="link_url">
+                                    <label for="banner_link_url" class="form-label">
                                         <span class="label-text">Link Tujuan</span>
                                     </label>
                                     <div class="input-border"></div>
@@ -639,8 +639,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             
                             <div class="form-group-modern full-width">
                                 <div class="input-wrapper">
-                                    <input type="url" class="form-input" id="link_url" name="link_url" required>
-                                    <label for="link_url" class="form-label">
+                                    <input type="url" class="form-input" id="text_link_url" name="link_url" required>
+                                    <label for="text_link_url" class="form-label">
                                         <span class="label-text">Link Tujuan</span>
                                         <span class="label-required">*</span>
                                     </label>

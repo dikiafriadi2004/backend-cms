@@ -3,543 +3,341 @@
 @section('title', 'Edit Iklan')
 
 @section('content')
-<div class="ads-form-container">
-    <!-- Ultra Modern Header -->
-    <div class="form-header">
+<div class="modern-container">
+    <!-- Header -->
+    <div class="page-header">
         <div class="container-fluid">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <div class="header-content">
-                        <div class="header-badge">
+            <div class="header-content">
+                <div class="header-main">
+                    <nav class="breadcrumb-nav">
+                        <span class="breadcrumb-item">
+                            <i class="fas fa-bullhorn"></i>
+                            Manajemen Iklan
+                        </span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="breadcrumb-current">Edit Iklan</span>
+                    </nav>
+                    <h1 class="page-title">
+                        <span class="title-icon">
                             <i class="fas fa-edit"></i>
-                            <span>Ads Editor</span>
-                        </div>
-                        <h1 class="header-title">
-                            Edit Iklan: {{ $ad->name }}
-                        </h1>
-                        <p class="header-subtitle">
-                            Perbarui pengaturan dan konfigurasi iklan dengan mudah
-                        </p>
-                        <div class="ad-status-info">
-                            <div class="status-item">
-                                <span class="status-label">Status:</span>
-                                <span class="status-badge status-{{ $ad->status ? 'active' : 'inactive' }}">
-                                    <i class="fas fa-{{ $ad->status ? 'check-circle' : 'pause-circle' }}"></i>
-                                    {{ $ad->status ? 'Aktif' : 'Nonaktif' }}
-                                </span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">Tipe:</span>
-                                <span class="type-badge type-{{ $ad->type }}">
-                                    <i class="fas fa-{{ 
-                                        $ad->type === 'manual_banner' ? 'image' : 
-                                        ($ad->type === 'manual_text' ? 'link' : 
-                                        ($ad->type === 'adsense' ? 'google' : 'code')) 
-                                    }}"></i>
-                                    {{ \App\Models\AdSpace::TYPES[$ad->type] ?? $ad->type }}
-                                </span>
-                            </div>
-                            <div class="status-item">
-                                <span class="status-label">Performa:</span>
-                                <span class="performance-summary">
-                                    {{ number_format($ad->view_count) }} views • {{ number_format($ad->click_count) }} clicks • {{ $ad->getClickThroughRate() }}% CTR
-                                </span>
-                            </div>
-                        </div>
+                        </span>
+                        {{ $ad->name }}
+                    </h1>
+                    <div class="status-badge {{ $ad->status ? 'active' : 'inactive' }}">
+                        <div class="status-dot"></div>
+                        <span>{{ $ad->status ? 'Aktif' : 'Tidak Aktif' }}</span>
                     </div>
                 </div>
-                <div class="col-lg-4 text-end">
-                    <div class="header-actions">
-                        <a href="{{ route('admin.ads.analytics', $ad) }}" class="btn-analytics">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Analytics</span>
-                        </a>
-                        <a href="{{ route('admin.ads.index') }}" class="btn-back">
-                            <i class="fas fa-arrow-left"></i>
-                            <span>Kembali</span>
-                        </a>
-                    </div>
+                <div class="header-actions">
+                    <a href="{{ route('admin.ads.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Kembali
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Form Container -->
-    <div class="form-main">
+    <!-- Form -->
+    <div class="form-section">
         <div class="container-fluid">
-            <form action="{{ route('admin.ads.update', $ad) }}" method="POST" class="ultra-form">
+            <form action="{{ route('admin.ads.update', $ad) }}" method="POST" class="edit-form">
                 @csrf
                 @method('PUT')
                 
-                <div class="row g-4">
+                <div class="form-layout">
                     <!-- Main Content -->
-                    <div class="col-lg-8">
-                        <!-- Basic Information Section -->
-                        <div class="form-section">
-                            <div class="section-header">
-                                <h3 class="section-title">
+                    <div class="form-main">
+                        <!-- Basic Information -->
+                        <div class="form-card">
+                            <div class="card-header">
+                                <div class="header-icon">
                                     <i class="fas fa-info-circle"></i>
-                                    Informasi Dasar
-                                </h3>
-                                <p class="section-description">Pengaturan dasar dan identitas iklan</p>
+                                </div>
+                                <div class="header-text">
+                                    <h3>Informasi Dasar</h3>
+                                    <p>Konfigurasi pengaturan dasar iklan Anda</p>
+                                </div>
                             </div>
-                            
-                            <div class="form-grid">
-                                <div class="form-group-modern full-width">
-                                    <div class="input-wrapper">
-                                        <input type="text" class="form-input @error('name') error @enderror" 
-                                               id="name" name="name" value="{{ old('name', $ad->name) }}" required>
-                                        <label for="name" class="form-label">
-                                            <span class="label-text">Nama Iklan</span>
-                                            <span class="label-required">*</span>
-                                        </label>
-                                        <div class="input-border"></div>
-                                    </div>
-                                    @error('name')
-                                        <div class="field-error">{{ $message }}</div>
-                                    @enderror
-                                    <div class="field-help">
-                                        <i class="fas fa-lightbulb"></i>
-                                        Nama internal untuk identifikasi (tidak ditampilkan ke pengunjung)
-                                    </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="adName" class="form-label">
+                                        <i class="fas fa-tag"></i>
+                                        Nama Iklan
+                                    </label>
+                                    <input type="text" 
+                                           name="name" 
+                                           id="adName"
+                                           class="form-control" 
+                                           value="{{ old('name', $ad->name) }}" 
+                                           required>
                                 </div>
 
                                 <div class="form-row">
-                                    <div class="form-group-modern">
-                                        <div class="input-wrapper">
-                                            <select class="form-input @error('position') error @enderror" 
-                                                    id="position" name="position" required>
-                                                <option value="">Pilih Posisi</option>
-                                                @foreach($positions as $key => $value)
-                                                    <option value="{{ $key }}" {{ old('position', $ad->position) == $key ? 'selected' : '' }}>
-                                                        {{ $value }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <label for="position" class="form-label">
-                                                <span class="label-text">Posisi Iklan</span>
-                                                <span class="label-required">*</span>
-                                            </label>
-                                            <div class="input-border"></div>
-                                        </div>
-                                        @error('position')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group-modern">
-                                        <div class="input-wrapper">
-                                            <input type="number" class="form-input @error('sort_order') error @enderror" 
-                                                   id="sort_order" name="sort_order" value="{{ old('sort_order', $ad->sort_order) }}" min="0">
-                                            <label for="sort_order" class="form-label">
-                                                <span class="label-text">Urutan Tampil</span>
-                                            </label>
-                                            <div class="input-border"></div>
-                                        </div>
-                                        @error('sort_order')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                        <div class="field-help">
-                                            <i class="fas fa-sort-numeric-down"></i>
-                                            Angka kecil akan ditampilkan lebih dulu
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Ad Type Section -->
-                        <div class="form-section">
-                            <div class="section-header">
-                                <h3 class="section-title">
-                                    <i class="fas fa-layer-group"></i>
-                                    Tipe Iklan
-                                </h3>
-                                <p class="section-description">Ubah jenis iklan dan konfigurasinya</p>
-                            </div>
-                            
-                            <div class="form-grid">
-                                <div class="form-group-modern full-width">
-                                    <div class="input-wrapper">
-                                        <select class="form-input @error('type') error @enderror" 
-                                                id="type" name="type" required onchange="toggleAdFields()">
-                                            <option value="">Pilih Tipe Iklan</option>
-                                            @foreach($types as $key => $value)
-                                                <option value="{{ $key }}" {{ old('type', $ad->type) == $key ? 'selected' : '' }}>
-                                                    {{ $value }}
-                                                </option>
+                                    <div class="form-group">
+                                        <label for="adPosition" class="form-label">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            Posisi Tampil
+                                        </label>
+                                        <select name="position" id="adPosition" class="form-control" required>
+                                            @foreach($positions as $key => $value)
+                                                <option value="{{ $key }}" {{ old('position', $ad->position) == $key ? 'selected' : '' }}>{{ $value }}</option>
                                             @endforeach
                                         </select>
-                                        <label for="type" class="form-label">
-                                            <span class="label-text">Tipe Iklan</span>
-                                            <span class="label-required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="adType" class="form-label">
+                                            <i class="fas fa-layer-group"></i>
+                                            Tipe Iklan
                                         </label>
-                                        <div class="input-border"></div>
-                                    </div>
-                                    @error('type')
-                                        <div class="field-error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Dynamic Content Based on Ad Type -->
-                        <div id="dynamicContent">
-                            <!-- Manual Banner Fields -->
-                            <div id="manual-banner-fields" class="form-section" style="display: none;">
-                                <div class="section-header">
-                                    <h3 class="section-title">
-                                        <i class="fas fa-image"></i>
-                                        Pengaturan Banner
-                                    </h3>
-                                    <p class="section-description">Konfigurasi gambar banner dan dimensinya</p>
-                                </div>
-                                
-                                <div class="form-grid">
-                                    @if($ad->image_url)
-                                        <div class="current-preview full-width">
-                                            <div class="preview-header">
-                                                <h4>Preview Saat Ini</h4>
-                                            </div>
-                                            <div class="preview-container">
-                                                <img src="{{ $ad->image_url }}" alt="{{ $ad->alt_text }}" 
-                                                     class="preview-image">
-                                            </div>
-                                        </div>
-                                    @endif
-                                    
-                                    <div class="form-group-modern full-width">
-                                        <div class="input-wrapper">
-                                            <input type="url" class="form-input @error('image_url') error @enderror" 
-                                                   id="image_url" name="image_url" value="{{ old('image_url', $ad->image_url) }}">
-                                            <label for="image_url" class="form-label">
-                                                <span class="label-text">URL Gambar</span>
-                                                <span class="label-required">*</span>
-                                            </label>
-                                            <div class="input-border"></div>
-                                        </div>
-                                        @error('image_url')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                        <div class="field-help">
-                                            <i class="fas fa-link"></i>
-                                            URL gambar banner yang akan ditampilkan
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="form-group-modern">
-                                            <div class="input-wrapper">
-                                                <input type="number" class="form-input @error('width') error @enderror" 
-                                                       id="width" name="width" value="{{ old('width', $ad->width) }}" min="1">
-                                                <label for="width" class="form-label">
-                                                    <span class="label-text">Lebar (px)</span>
-                                                    <span class="label-required">*</span>
-                                                </label>
-                                                <div class="input-border"></div>
-                                            </div>
-                                            @error('width')
-                                                <div class="field-error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        
-                                        <div class="form-group-modern">
-                                            <div class="input-wrapper">
-                                                <input type="number" class="form-input @error('height') error @enderror" 
-                                                       id="height" name="height" value="{{ old('height', $ad->height) }}" min="1">
-                                                <label for="height" class="form-label">
-                                                    <span class="label-text">Tinggi (px)</span>
-                                                    <span class="label-required">*</span>
-                                                </label>
-                                                <div class="input-border"></div>
-                                            </div>
-                                            @error('height')
-                                                <div class="field-error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="preset-sizes full-width">
-                                        <h5>Ukuran Standar</h5>
-                                        <div class="size-grid">
-                                            @foreach($bannerSizes as $name => $size)
-                                                <button type="button" class="size-preset" 
-                                                        onclick="setSize({{ $size['width'] }}, {{ $size['height'] }})">
-                                                    <span class="size-name">{{ ucwords(str_replace('_', ' ', $name)) }}</span>
-                                                    <span class="size-dim">{{ $size['width'] }}×{{ $size['height'] }}</span>
-                                                </button>
+                                        <select name="type" id="adType" class="form-control" required>
+                                            @foreach($types as $key => $value)
+                                                <option value="{{ $key }}" {{ old('type', $ad->type) == $key ? 'selected' : '' }}>{{ $value }}</option>
                                             @endforeach
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="form-group-modern">
-                                            <div class="input-wrapper">
-                                                <input type="url" class="form-input @error('link_url') error @enderror" 
-                                                       id="link_url" name="link_url" value="{{ old('link_url', $ad->link_url) }}">
-                                                <label for="link_url" class="form-label">
-                                                    <span class="label-text">Link Tujuan</span>
-                                                </label>
-                                                <div class="input-border"></div>
-                                            </div>
-                                            @error('link_url')
-                                                <div class="field-error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        
-                                        <div class="form-group-modern">
-                                            <div class="input-wrapper">
-                                                <input type="text" class="form-input @error('alt_text') error @enderror" 
-                                                       id="alt_text" name="alt_text" value="{{ old('alt_text', $ad->alt_text) }}">
-                                                <label for="alt_text" class="form-label">
-                                                    <span class="label-text">Alt Text</span>
-                                                </label>
-                                                <div class="input-border"></div>
-                                            </div>
-                                            @error('alt_text')
-                                                <div class="field-error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Manual Text Fields -->
-                            <div id="manual-text-fields" class="form-section" style="display: none;">
-                                <div class="section-header">
-                                    <h3 class="section-title">
-                                        <i class="fas fa-link"></i>
-                                        Pengaturan Text Link
-                                    </h3>
-                                    <p class="section-description">Konfigurasi teks dan link tujuan</p>
-                                </div>
-                                
-                                <div class="form-grid">
-                                    <div class="form-group-modern full-width">
-                                        <div class="input-wrapper">
-                                            <input type="text" class="form-input @error('title') error @enderror" 
-                                                   id="title" name="title" value="{{ old('title', $ad->title) }}">
-                                            <label for="title" class="form-label">
-                                                <span class="label-text">Judul Link</span>
-                                                <span class="label-required">*</span>
-                                            </label>
-                                            <div class="input-border"></div>
-                                        </div>
-                                        @error('title')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    
-                                    <div class="form-group-modern full-width">
-                                        <div class="input-wrapper">
-                                            <textarea class="form-input @error('description') error @enderror" 
-                                                      id="description" name="description" rows="3">{{ old('description', $ad->description) }}</textarea>
-                                            <label for="description" class="form-label">
-                                                <span class="label-text">Deskripsi</span>
-                                            </label>
-                                            <div class="input-border"></div>
-                                        </div>
-                                        @error('description')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    
-                                    <div class="form-group-modern full-width">
-                                        <div class="input-wrapper">
-                                            <input type="url" class="form-input @error('link_url') error @enderror" 
-                                                   id="link_url_text" name="link_url" value="{{ old('link_url', $ad->link_url) }}">
-                                            <label for="link_url_text" class="form-label">
-                                                <span class="label-text">Link Tujuan</span>
-                                                <span class="label-required">*</span>
-                                            </label>
-                                            <div class="input-border"></div>
-                                        </div>
-                                        @error('link_url')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Code Fields for AdSense/Adsera -->
-                            <div id="code-fields" class="form-section" style="display: none;">
-                                <div class="section-header">
-                                    <h3 class="section-title">
-                                        <i class="fas fa-code"></i>
-                                        Kode Iklan
-                                    </h3>
-                                    <p class="section-description">Paste kode iklan dari dashboard provider</p>
-                                </div>
-                                
-                                <div class="form-grid">
-                                    <div class="form-group-modern full-width">
-                                        <div class="input-wrapper">
-                                            <textarea class="form-input code-input @error('code') error @enderror" 
-                                                      id="code" name="code" rows="12">{{ old('code', $ad->code) }}</textarea>
-                                            <label for="code" class="form-label">
-                                                <span class="label-text">Kode Iklan</span>
-                                                <span class="label-required">*</span>
-                                            </label>
-                                            <div class="input-border"></div>
-                                        </div>
-                                        @error('code')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                        <div class="field-help">
-                                            <i class="fas fa-info-circle"></i>
-                                            Copy kode lengkap dari dashboard provider iklan
-                                        </div>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Schedule Settings -->
-                        <div class="form-section">
-                            <div class="section-header">
-                                <h3 class="section-title">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    Jadwal Tayang
-                                </h3>
-                                <p class="section-description">Atur periode aktif iklan</p>
+                        <!-- Content Configuration -->
+                        <div class="form-card" id="contentCard">
+                            <div class="card-header">
+                                <div class="header-icon" id="contentIcon">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <div class="header-text">
+                                    <h3 id="contentTitle">Konfigurasi Konten</h3>
+                                    <p id="contentDescription">Atur konten dan pengaturan iklan Anda</p>
+                                </div>
                             </div>
-                            
-                            <div class="form-grid">
-                                <div class="form-row">
-                                    <div class="form-group-modern">
-                                        <div class="input-wrapper">
-                                            <input type="datetime-local" class="form-input @error('start_date') error @enderror" 
-                                                   id="start_date" name="start_date" 
-                                                   value="{{ old('start_date', $ad->start_date ? $ad->start_date->format('Y-m-d\TH:i') : '') }}">
-                                            <label for="start_date" class="form-label">
-                                                <span class="label-text">Tanggal Mulai</span>
+                            <div class="card-body">
+                                <!-- Link URL -->
+                                <div class="form-group" id="linkUrlGroup">
+                                    <label for="linkUrl" class="form-label">
+                                        <i class="fas fa-link"></i>
+                                        URL Tujuan
+                                    </label>
+                                    <input type="url" 
+                                           name="link_url" 
+                                           id="linkUrl"
+                                           class="form-control" 
+                                           value="{{ old('link_url', $ad->link_url) }}">
+                                    <small class="form-hint">URL tujuan ketika pengguna mengklik iklan</small>
+                                </div>
+
+                                <!-- Banner Fields -->
+                                <div id="bannerFields" class="dynamic-content">
+                                    <div class="form-group">
+                                        <label for="imageUrl" class="form-label">
+                                            <i class="fas fa-image"></i>
+                                            URL Gambar Banner
+                                        </label>
+                                        <input type="url" 
+                                               name="image_url" 
+                                               id="imageUrl"
+                                               class="form-control" 
+                                               value="{{ old('image_url', $ad->image_url) }}">
+                                        <small class="form-hint">Link langsung ke gambar banner berkualitas tinggi</small>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="bannerWidth" class="form-label">
+                                                <i class="fas fa-arrows-alt-h"></i>
+                                                Lebar (pixel)
                                             </label>
-                                            <div class="input-border"></div>
+                                            <input type="number" 
+                                                   name="width" 
+                                                   id="bannerWidth"
+                                                   class="form-control" 
+                                                   value="{{ old('width', $ad->width) }}">
                                         </div>
-                                        @error('start_date')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                        <div class="field-help">
-                                            <i class="fas fa-play"></i>
-                                            Kosongkan untuk mulai sekarang
+                                        <div class="form-group">
+                                            <label for="bannerHeight" class="form-label">
+                                                <i class="fas fa-arrows-alt-v"></i>
+                                                Tinggi (pixel)
+                                            </label>
+                                            <input type="number" 
+                                                   name="height" 
+                                                   id="bannerHeight"
+                                                   class="form-control" 
+                                                   value="{{ old('height', $ad->height) }}">
                                         </div>
                                     </div>
 
-                                    <div class="form-group-modern">
-                                        <div class="input-wrapper">
-                                            <input type="datetime-local" class="form-input @error('end_date') error @enderror" 
-                                                   id="end_date" name="end_date" 
-                                                   value="{{ old('end_date', $ad->end_date ? $ad->end_date->format('Y-m-d\TH:i') : '') }}">
-                                            <label for="end_date" class="form-label">
-                                                <span class="label-text">Tanggal Berakhir</span>
-                                            </label>
-                                            <div class="input-border"></div>
-                                        </div>
-                                        @error('end_date')
-                                            <div class="field-error">{{ $message }}</div>
-                                        @enderror
-                                        <div class="field-help">
-                                            <i class="fas fa-stop"></i>
-                                            Kosongkan untuk tayang permanen
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="altText" class="form-label">
+                                            <i class="fas fa-font"></i>
+                                            Teks Alternatif
+                                        </label>
+                                        <input type="text" 
+                                               name="alt_text" 
+                                               id="altText"
+                                               class="form-control" 
+                                               value="{{ old('alt_text', $ad->alt_text) }}">
+                                        <small class="form-hint">Teks deskriptif untuk aksesibilitas dan SEO</small>
                                     </div>
                                 </div>
-                                
-                                @if($ad->end_date && $ad->daysRemaining() !== null)
-                                    <div class="schedule-alert">
-                                        <i class="fas fa-clock"></i>
-                                        <span><strong>{{ $ad->daysRemaining() }} hari lagi</strong> iklan ini akan berakhir</span>
+
+                                <!-- Code Fields -->
+                                <div id="codeFields" class="dynamic-content">
+                                    <div class="form-group">
+                                        <label for="adCode" class="form-label">
+                                            <i class="fas fa-code"></i>
+                                            Kode Iklan
+                                        </label>
+                                        <textarea name="code" 
+                                                  id="adCode"
+                                                  class="form-control code-textarea" 
+                                                  rows="10"
+                                                  placeholder="Tempel kode iklan Anda di sini...">{{ old('code', $ad->code) }}</textarea>
+                                        <small class="form-hint" id="codeHint">Tempel kode iklan lengkap dari penyedia Anda</small>
                                     </div>
-                                @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Settings -->
+                        <div class="form-card">
+                            <div class="card-header">
+                                <div class="header-icon">
+                                    <i class="fas fa-sliders-h"></i>
+                                </div>
+                                <div class="header-text">
+                                    <h3>Pengaturan Lanjutan</h3>
+                                    <p>Sesuaikan iklan untuk performa optimal</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="adTitle" class="form-label">
+                                        <i class="fas fa-heading"></i>
+                                        Judul Internal
+                                    </label>
+                                    <input type="text" 
+                                           name="title" 
+                                           id="adTitle"
+                                           class="form-control" 
+                                           value="{{ old('title', $ad->title) }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="adDescription" class="form-label">
+                                        <i class="fas fa-align-left"></i>
+                                        Deskripsi
+                                    </label>
+                                    <textarea name="description" 
+                                              id="adDescription"
+                                              class="form-control" 
+                                              rows="3">{{ old('description', $ad->description) }}</textarea>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="startDate" class="form-label">
+                                            <i class="fas fa-calendar-plus"></i>
+                                            Tanggal Mulai
+                                        </label>
+                                        <input type="datetime-local" 
+                                               name="start_date" 
+                                               id="startDate"
+                                               class="form-control" 
+                                               value="{{ old('start_date', $ad->start_date ? $ad->start_date->format('Y-m-d\TH:i') : '') }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endDate" class="form-label">
+                                            <i class="fas fa-calendar-minus"></i>
+                                            Tanggal Berakhir
+                                        </label>
+                                        <input type="datetime-local" 
+                                               name="end_date" 
+                                               id="endDate"
+                                               class="form-control" 
+                                               value="{{ old('end_date', $ad->end_date ? $ad->end_date->format('Y-m-d\TH:i') : '') }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sortOrder" class="form-label">
+                                        <i class="fas fa-sort-numeric-down"></i>
+                                        Prioritas Tampil
+                                    </label>
+                                    <input type="number" 
+                                           name="sort_order" 
+                                           id="sortOrder"
+                                           class="form-control" 
+                                           value="{{ old('sort_order', $ad->sort_order) }}" 
+                                           min="0">
+                                    <small class="form-hint">Angka lebih kecil memiliki prioritas lebih tinggi</small>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Sidebar -->
-                    <div class="col-lg-4">
-                        <!-- Performance Stats -->
-                        <div class="sidebar-section">
-                            <div class="section-header">
-                                <h3 class="section-title">
-                                    <i class="fas fa-chart-line"></i>
-                                    Performa Saat Ini
-                                </h3>
-                            </div>
-                            
-                            <div class="stats-grid">
-                                <div class="stat-item">
-                                    <div class="stat-icon bg-gradient-info">
-                                        <i class="fas fa-eye"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="stat-value">{{ number_format($ad->view_count) }}</div>
-                                        <div class="stat-label">Total Views</div>
-                                    </div>
+                    <div class="form-sidebar">
+                        <!-- Control Panel -->
+                        <div class="form-card">
+                            <div class="card-header">
+                                <div class="header-icon">
+                                    <i class="fas fa-toggle-on"></i>
                                 </div>
-                                
-                                <div class="stat-item">
-                                    <div class="stat-icon bg-gradient-success">
-                                        <i class="fas fa-mouse-pointer"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="stat-value">{{ number_format($ad->click_count) }}</div>
-                                        <div class="stat-label">Total Clicks</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="stat-item full-width">
-                                    <div class="stat-icon bg-gradient-warning">
-                                        <i class="fas fa-percentage"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="stat-value">{{ $ad->getClickThroughRate() }}%</div>
-                                        <div class="stat-label">Click Through Rate</div>
-                                    </div>
+                                <div class="header-text">
+                                    <h3>Panel Kontrol</h3>
+                                    <p>Kelola visibilitas dan perilaku</p>
                                 </div>
                             </div>
-                        </div>
+                            <div class="card-body">
+                                <div class="toggle-group">
+                                    <div class="toggle-item">
+                                        <input type="checkbox" 
+                                               name="status" 
+                                               value="1" 
+                                               id="statusToggle" 
+                                               {{ old('status', $ad->status) ? 'checked' : '' }}>
+                                        <label for="statusToggle" class="toggle-label">
+                                            <div class="toggle-switch">
+                                                <div class="toggle-slider"></div>
+                                            </div>
+                                            <div class="toggle-content">
+                                                <div class="toggle-title">Status Iklan</div>
+                                                <div class="toggle-desc">Tampilkan iklan ini di website</div>
+                                            </div>
+                                        </label>
+                                    </div>
 
-                        <!-- Settings -->
-                        <div class="sidebar-section">
-                            <div class="section-header">
-                                <h3 class="section-title">
-                                    <i class="fas fa-cog"></i>
-                                    Pengaturan
-                                </h3>
-                            </div>
-                            
-                            <div class="settings-grid">
-                                <div class="switch-group">
-                                    <input type="checkbox" class="switch-input" id="status" name="status" value="1" 
-                                           {{ old('status', $ad->status) ? 'checked' : '' }}>
-                                    <label for="status" class="switch-label">
-                                        <span class="switch-slider"></span>
-                                        <span class="switch-text">Aktifkan Iklan</span>
-                                    </label>
-                                </div>
-                                
-                                <div class="switch-group">
-                                    <input type="checkbox" class="switch-input" id="open_new_tab" name="open_new_tab" value="1" 
-                                           {{ old('open_new_tab', $ad->open_new_tab) ? 'checked' : '' }}>
-                                    <label for="open_new_tab" class="switch-label">
-                                        <span class="switch-slider"></span>
-                                        <span class="switch-text">Buka di Tab Baru</span>
-                                    </label>
+                                    <div class="toggle-item">
+                                        <input type="checkbox" 
+                                               name="open_new_tab" 
+                                               value="1" 
+                                               id="newTabToggle" 
+                                               {{ old('open_new_tab', $ad->open_new_tab) ? 'checked' : '' }}>
+                                        <label for="newTabToggle" class="toggle-label">
+                                            <div class="toggle-switch">
+                                                <div class="toggle-slider"></div>
+                                            </div>
+                                            <div class="toggle-content">
+                                                <div class="toggle-title">Buka di Tab Baru</div>
+                                                <div class="toggle-desc">Buka link tujuan di tab browser baru</div>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Action Buttons -->
-                        <div class="sidebar-section">
-                            <div class="action-buttons">
-                                <button type="submit" class="btn-success full-width">
+                        <div class="form-card">
+                            <div class="card-body">
+                                <button type="submit" class="btn btn-primary btn-block">
                                     <i class="fas fa-save"></i>
-                                    <span>Update Iklan</span>
+                                    Perbarui Iklan
                                 </button>
                                 
-                                <a href="{{ route('admin.ads.index') }}" class="btn-secondary full-width">
+                                <a href="{{ route('admin.ads.index') }}" class="btn btn-secondary btn-block">
                                     <i class="fas fa-times"></i>
-                                    <span>Batal</span>
+                                    Batal
                                 </a>
                             </div>
                         </div>
@@ -550,588 +348,141 @@
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize form based on current ad type
-    toggleAdFields();
-    
-    // Form input animations
-    document.querySelectorAll('.form-input').forEach(input => {
-        input.addEventListener('focus', function() {
-            this.parentElement.classList.add('focused');
-        });
-        
-        input.addEventListener('blur', function() {
-            if (!this.value) {
-                this.parentElement.classList.remove('focused');
-            }
-        });
-        
-        // Check if input has value on load
-        if (input.value) {
-            input.parentElement.classList.add('focused');
-        }
-    });
-});
-
-function toggleAdFields() {
-    const type = document.getElementById('type').value;
-    const manualBannerFields = document.getElementById('manual-banner-fields');
-    const manualTextFields = document.getElementById('manual-text-fields');
-    const codeFields = document.getElementById('code-fields');
-    
-    // Hide all fields first
-    manualBannerFields.style.display = 'none';
-    manualTextFields.style.display = 'none';
-    codeFields.style.display = 'none';
-    
-    // Reset required fields
-    document.getElementById('image_url').required = false;
-    document.getElementById('width').required = false;
-    document.getElementById('height').required = false;
-    document.getElementById('title').required = false;
-    document.getElementById('link_url_text').required = false;
-    document.getElementById('code').required = false;
-    
-    if (type === 'manual_banner') {
-        manualBannerFields.style.display = 'block';
-        document.getElementById('image_url').required = true;
-        document.getElementById('width').required = true;
-        document.getElementById('height').required = true;
-    } else if (type === 'manual_text') {
-        manualTextFields.style.display = 'block';
-        document.getElementById('title').required = true;
-        document.getElementById('link_url_text').required = true;
-    } else if (type === 'adsense' || type === 'adsera') {
-        codeFields.style.display = 'block';
-        document.getElementById('code').required = true;
-        
-        // Update section title based on type
-        const sectionTitle = codeFields.querySelector('.section-title');
-        if (type === 'adsense') {
-            sectionTitle.innerHTML = '<i class="fab fa-google"></i>Kode Google AdSense';
-        } else {
-            sectionTitle.innerHTML = '<i class="fas fa-code"></i>Kode Adsera';
-        }
-    }
-}
-
-function setSize(width, height) {
-    document.getElementById('width').value = width;
-    document.getElementById('height').value = height;
-    
-    // Add visual feedback
-    event.target.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-        event.target.style.transform = 'scale(1)';
-    }, 150);
-}
-</script>
-
-<!-- Include the same ultra-modern CSS from create form -->
 <style>
-/* Ultra Modern Ads Editor Styling */
-:root {
-    --primary-color: #6366f1;
-    --primary-light: #a5b4fc;
-    --primary-dark: #4338ca;
-    --success-color: #10b981;
-    --success-light: #6ee7b7;
-    --warning-color: #f59e0b;
-    --warning-light: #fcd34d;
-    --info-color: #06b6d4;
-    --info-light: #67e8f9;
-    --danger-color: #ef4444;
-    --danger-light: #fca5a5;
-    --secondary-color: #6b7280;
-    --secondary-light: #d1d5db;
-    --dark-color: #1f2937;
-    --light-color: #f9fafb;
-    --border-radius: 16px;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-/* Main Container */
-.ads-form-container {
+/* Modern Clean Styling */
+.modern-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    position: relative;
-    overflow-x: hidden;
+    background: #f8fafc;
 }
 
-.ads-form-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 300px;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 50%, var(--info-color) 100%);
-    opacity: 0.1;
-    z-index: 0;
-}
-
-/* Ultra Modern Header */
-.form-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+/* Header */
+.page-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
     padding: 2rem 0;
-    position: relative;
-    z-index: 10;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .header-content {
-    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-.header-badge {
-    display: inline-flex;
+.breadcrumb-nav {
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: linear-gradient(135deg, var(--success-color), var(--success-light));
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
+    gap: 0.75rem;
     font-size: 0.875rem;
-    font-weight: 600;
     margin-bottom: 1rem;
-    box-shadow: var(--shadow-md);
+    color: #6b7280;
 }
 
-.header-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--dark-color), var(--primary-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.5rem;
-    line-height: 1.2;
-}
-
-.header-subtitle {
-    font-size: 1.125rem;
-    color: var(--secondary-color);
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-}
-
-/* Ad Status Info */
-.ad-status-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: center;
-}
-
-.status-item {
+.breadcrumb-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.status-label {
-    font-size: 0.875rem;
+.breadcrumb-current {
     font-weight: 600;
-    color: var(--secondary-color);
+    color: #4f46e5;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.title-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
 .status-badge {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 50px;
-    font-size: 0.75rem;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.status-active {
-    background: linear-gradient(135deg, var(--success-color), var(--success-light));
-    color: white;
-}
-
-.status-inactive {
-    background: linear-gradient(135deg, var(--warning-color), var(--warning-light));
-    color: white;
-}
-
-.type-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary-color);
-}
-
-.performance-summary {
     font-size: 0.875rem;
-    color: var(--dark-color);
-    font-weight: 500;
 }
 
-/* Header Actions */
+.status-badge.active {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.status-badge.inactive {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
 .header-actions {
     display: flex;
     gap: 1rem;
-    align-items: center;
 }
 
-.btn-analytics {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, var(--info-color), var(--info-light));
-    border: 2px solid var(--info-color);
-    border-radius: 12px;
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn-analytics:hover {
-    background: linear-gradient(135deg, var(--info-light), var(--info-color));
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    text-decoration: none;
-    color: white;
-}
-
-.btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid rgba(107, 114, 128, 0.2);
-    border-radius: 12px;
-    color: var(--secondary-color);
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.btn-back:hover {
-    background: white;
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    text-decoration: none;
-}
-
-/* Main Form */
-.form-main {
-    padding: 3rem 0;
-    position: relative;
-    z-index: 5;
-}
-
-.ultra-form {
-    position: relative;
-}
-
-/* Form Sections */
+/* Form Section */
 .form-section {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: var(--border-radius);
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    position: relative;
-    overflow: hidden;
+    padding: 2rem 0;
 }
 
-.form-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--info-color), var(--success-color));
-}
-
-.sidebar-section {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.section-header {
-    margin-bottom: 2rem;
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--dark-color);
-    margin-bottom: 0.5rem;
-}
-
-.section-title i {
-    color: var(--primary-color);
-}
-
-.section-description {
-    color: var(--secondary-color);
-    font-size: 0.875rem;
-}
-
-/* Form Grid and Inputs */
-.form-grid {
+.form-layout {
     display: grid;
+    grid-template-columns: 1fr 350px;
     gap: 2rem;
 }
 
-.form-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-}
-
-.form-group-modern {
-    position: relative;
-    margin-bottom: 1.5rem;
-}
-
-.form-group-modern.full-width {
-    grid-column: 1 / -1;
-}
-
-.input-wrapper {
-    position: relative;
-}
-
-.form-input {
-    width: 100%;
-    padding: 1.25rem 1rem 0.75rem;
-    border: 2px solid rgba(229, 231, 235, 0.5);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.8);
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--dark-color);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-}
-
-.form-input.error {
-    border-color: var(--danger-color);
-    background: rgba(239, 68, 68, 0.05);
-}
-
-.form-label {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--secondary-color);
-    font-weight: 600;
-    pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: transparent;
-    padding: 0 0.25rem;
-}
-
-.input-wrapper.focused .form-label,
-.form-input:focus + .form-label,
-.form-input:not(:placeholder-shown) + .form-label {
-    top: 0;
-    font-size: 0.75rem;
-    color: var(--primary-color);
-    background: white;
-    padding: 0 0.5rem;
-}
-
-.label-required {
-    color: var(--danger-color);
-}
-
-.input-border {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--primary-color), var(--info-color));
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
-
-.form-input:focus ~ .input-border {
-    width: 100%;
-}
-
-/* Field Help and Errors */
-.field-help {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-    font-size: 0.875rem;
-    color: var(--secondary-color);
-}
-
-.field-help i {
-    color: var(--info-color);
-}
-
-.field-error {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    color: var(--danger-color);
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
-/* Current Preview */
-.current-preview {
+/* Form Cards */
+.form-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
     margin-bottom: 2rem;
-}
-
-.preview-header h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--dark-color);
-    margin-bottom: 1rem;
-}
-
-.preview-container {
-    background: rgba(248, 250, 252, 0.8);
-    border: 1px solid rgba(229, 231, 235, 0.5);
-    border-radius: 12px;
-    padding: 2rem;
-    text-align: center;
-}
-
-.preview-image {
-    max-width: 100%;
-    max-height: 200px;
-    border-radius: 8px;
-    box-shadow: var(--shadow-md);
-}
-
-/* Preset Sizes */
-.preset-sizes h5 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--dark-color);
-    margin-bottom: 1rem;
-}
-
-.size-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 0.75rem;
-}
-
-.size-preset {
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    border-radius: 8px;
-    padding: 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    text-align: center;
 }
 
-.size-preset:hover {
-    background: var(--primary-color);
-    color: white;
+.form-card:hover {
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.size-name {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-}
-
-.size-dim {
-    display: block;
-    opacity: 0.8;
-}
-
-/* Code Input */
-.code-input {
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 0.875rem;
-    line-height: 1.6;
-}
-
-/* Schedule Alert */
-.schedule-alert {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: rgba(245, 158, 11, 0.1);
-    border: 1px solid rgba(245, 158, 11, 0.2);
-    border-radius: 8px;
-    padding: 1rem;
-    color: var(--warning-color);
-    font-weight: 600;
-    margin-top: 1rem;
-}
-
-/* Stats Grid */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-}
-
-.stat-item {
+.card-header {
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: rgba(248, 250, 252, 0.8);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid rgba(229, 231, 235, 0.3);
+    padding: 1.5rem 2rem;
+    background: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+    border-radius: 16px 16px 0 0;
 }
 
-.stat-item.full-width {
-    grid-column: 1 / -1;
-}
-
-.stat-icon {
+.header-icon {
     width: 48px;
     height: 48px;
     border-radius: 12px;
@@ -1140,227 +491,359 @@ function setSize(width, height) {
     justify-content: center;
     font-size: 1.25rem;
     color: white;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
 }
 
-.stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--dark-color);
-    line-height: 1;
-}
-
-.stat-label {
-    font-size: 0.75rem;
-    color: var(--secondary-color);
-    text-transform: uppercase;
+.header-text h3 {
+    font-size: 1.25rem;
     font-weight: 600;
-    letter-spacing: 0.05em;
+    color: #1f2937;
+    margin: 0 0 0.25rem 0;
 }
 
-/* Settings Grid */
-.settings-grid {
+.header-text p {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
     display: grid;
-    gap: 1.5rem;
-}
-
-/* Form Switches */
-.switch-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.switch-input {
-    display: none;
-}
-
-.switch-label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--dark-color);
-}
-
-.switch-slider {
-    width: 48px;
-    height: 24px;
-    background: #e5e7eb;
-    border-radius: 12px;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.switch-slider::before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 20px;
-    height: 20px;
-    background: white;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-sm);
-}
-
-.switch-input:checked + .switch-label .switch-slider {
-    background: var(--primary-color);
-}
-
-.switch-input:checked + .switch-label .switch-slider::before {
-    transform: translateX(24px);
-}
-
-/* Action Buttons */
-.action-buttons {
-    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
 
-.btn-secondary,
-.btn-primary,
-.btn-success {
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: #ffffff;
+    color: #1f2937;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-hint {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.code-textarea {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    min-height: 200px;
+    resize: vertical;
+}
+
+/* Dynamic Content */
+.dynamic-content {
+    display: none;
+}
+
+.dynamic-content.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Toggle Switches */
+.toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.toggle-item {
+    position: relative;
+}
+
+.toggle-item input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+}
+
+.toggle-label:hover {
+    background: #f1f5f9;
+    border-color: #d1d5db;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    background: #d1d5db;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input[type="checkbox"]:checked + .toggle-label .toggle-switch {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+input[type="checkbox"]:checked + .toggle-label .toggle-switch .toggle-slider {
+    transform: translateX(20px);
+}
+
+.toggle-title {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.toggle-desc {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Buttons */
+.btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 1rem 2rem;
-    border-radius: 12px;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
     font-weight: 600;
-    font-size: 1rem;
-    border: 2px solid;
+    font-size: 0.875rem;
+    text-decoration: none;
+    border: none;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
+    transition: all 0.2s ease;
 }
 
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(107, 114, 128, 0.3);
-    color: var(--secondary-color);
-}
-
-.btn-secondary:hover {
-    background: white;
-    border-color: var(--secondary-color);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-    text-decoration: none;
-    color: var(--secondary-color);
-}
-
-.btn-success {
-    background: linear-gradient(135deg, var(--success-color), #059669);
-    border-color: var(--success-color);
+.btn-primary {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
     color: white;
 }
 
-.btn-success:hover {
-    background: linear-gradient(135deg, #059669, var(--success-color));
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
 }
 
-.full-width {
+.btn-secondary {
+    background: #f9fafb;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.btn-block {
     width: 100%;
+    justify-content: center;
+    margin-bottom: 0.75rem;
 }
 
-/* Gradient Backgrounds */
-.bg-gradient-primary {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-}
-
-.bg-gradient-success {
-    background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
-}
-
-.bg-gradient-info {
-    background: linear-gradient(135deg, var(--info-color) 0%, #0891b2 100%);
-}
-
-.bg-gradient-warning {
-    background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
-}
-
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 1024px) {
-    .header-title {
-        font-size: 2rem;
+    .form-layout {
+        grid-template-columns: 1fr;
     }
     
-    .ad-status-info {
+    .header-content {
         flex-direction: column;
-        align-items: flex-start;
         gap: 1rem;
+        text-align: center;
     }
 }
 
 @media (max-width: 768px) {
-    .header-title {
-        font-size: 1.75rem;
-    }
-    
-    .header-subtitle {
-        font-size: 1rem;
-    }
-    
-    .header-actions {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .btn-analytics,
-    .btn-back {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .form-section,
-    .sidebar-section {
-        padding: 1.5rem;
-    }
-    
     .form-row {
         grid-template-columns: 1fr;
     }
     
-    .stats-grid {
-        grid-template-columns: 1fr;
+    .card-body {
+        padding: 1.5rem;
     }
     
-    .size-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .page-title {
+        font-size: 1.5rem;
     }
 }
-
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.form-section,
-.sidebar-section {
-    animation: fadeInUp 0.6s ease forwards;
-}
-
-.form-section:nth-child(1) { animation-delay: 0.1s; }
-.form-section:nth-child(2) { animation-delay: 0.2s; }
-.form-section:nth-child(3) { animation-delay: 0.3s; }
-.form-section:nth-child(4) { animation-delay: 0.4s; }
-
-.sidebar-section:nth-child(1) { animation-delay: 0.2s; }
-.sidebar-section:nth-child(2) { animation-delay: 0.3s; }
-.sidebar-section:nth-child(3) { animation-delay: 0.4s; }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const adTypeSelect = document.getElementById('adType');
+    const linkUrlGroup = document.getElementById('linkUrlGroup');
+    const bannerFields = document.getElementById('bannerFields');
+    const codeFields = document.getElementById('codeFields');
+    const contentIcon = document.getElementById('contentIcon');
+    const contentTitle = document.getElementById('contentTitle');
+    const contentDescription = document.getElementById('contentDescription');
+    const codeHint = document.getElementById('codeHint');
+
+    // Type configurations
+    const typeConfigs = {
+        manual_banner: {
+            icon: 'fas fa-image',
+            title: 'Konfigurasi Banner',
+            description: 'Desain dan konfigurasi iklan banner kustom Anda',
+            showLink: true,
+            showBanner: true,
+            showCode: false,
+            codeHint: ''
+        },
+        manual_text: {
+            icon: 'fas fa-font',
+            title: 'Konfigurasi Teks Link',
+            description: 'Buat iklan berbasis teks yang menarik',
+            showLink: true,
+            showBanner: false,
+            showCode: false,
+            codeHint: ''
+        },
+        adsense: {
+            icon: 'fab fa-google',
+            title: 'Integrasi Google AdSense',
+            description: 'Konfigurasi unit iklan Google AdSense Anda',
+            showLink: false,
+            showBanner: false,
+            showCode: true,
+            codeHint: 'Tempel kode unit iklan AdSense lengkap dari dashboard Google AdSense Anda. Jangan ubah kodenya.'
+        },
+        adsera: {
+            icon: 'fas fa-ad',
+            title: 'Integrasi Adsera',
+            description: 'Siapkan unit iklan Adsera Anda',
+            showLink: false,
+            showBanner: false,
+            showCode: true,
+            codeHint: 'Tempel kode unit iklan Adsera lengkap dari dashboard Adsera Anda. Jaga semua parameter tetap utuh.'
+        }
+    };
+
+    function updateContentSection() {
+        const selectedType = adTypeSelect.value;
+        const config = typeConfigs[selectedType] || typeConfigs.manual_banner;
+
+        // Update header
+        contentIcon.className = config.icon;
+        contentTitle.textContent = config.title;
+        contentDescription.textContent = config.description;
+
+        // Update code hint
+        if (codeHint) {
+            codeHint.textContent = config.codeHint || 'Tempel kode iklan lengkap dari penyedia Anda';
+        }
+
+        // Show/hide fields
+        linkUrlGroup.style.display = config.showLink ? 'block' : 'none';
+        
+        if (config.showBanner) {
+            bannerFields.classList.add('show');
+            bannerFields.style.display = 'block';
+        } else {
+            bannerFields.classList.remove('show');
+            bannerFields.style.display = 'none';
+        }
+
+        if (config.showCode) {
+            codeFields.classList.add('show');
+            codeFields.style.display = 'block';
+        } else {
+            codeFields.classList.remove('show');
+            codeFields.style.display = 'none';
+        }
+
+        // Update required attributes
+        updateRequiredFields(config);
+    }
+
+    function updateRequiredFields(config) {
+        const imageUrlField = document.querySelector('input[name="image_url"]');
+        const widthField = document.querySelector('input[name="width"]');
+        const heightField = document.querySelector('input[name="height"]');
+        const codeField = document.querySelector('textarea[name="code"]');
+
+        if (imageUrlField) {
+            imageUrlField.required = config.showBanner;
+        }
+        if (widthField) {
+            widthField.required = config.showBanner;
+        }
+        if (heightField) {
+            heightField.required = config.showBanner;
+        }
+        if (codeField) {
+            codeField.required = config.showCode;
+        }
+    }
+
+    // Initialize on page load
+    updateContentSection();
+
+    // Update on type change
+    adTypeSelect.addEventListener('change', updateContentSection);
+
+    // Auto-resize textarea
+    const codeTextarea = document.querySelector('.code-textarea');
+    if (codeTextarea) {
+        codeTextarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(200, this.scrollHeight) + 'px';
+        });
+    }
+});
+</script>
 @endsection

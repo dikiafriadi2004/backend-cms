@@ -4,23 +4,6 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Kelola Kontak</h1>
-            <p class="text-gray-600">Kelola pesan kontak dari pengunjung website</p>
-        </div>
-        
-        <div class="flex items-center gap-3">
-            <a href="{{ route('admin.contacts.export') }}" 
-               class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                Export CSV
-            </a>
-        </div>
-    </div>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -460,36 +443,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Simple toast notification
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-    
-    toast.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg text-white text-sm font-medium shadow-lg transform transition-all duration-300 translate-x-full ${bgColor}`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.remove('translate-x-full');
-    }, 100);
-    
-    setTimeout(() => {
-        toast.classList.add('translate-x-full');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-// Laravel session messages
+// Laravel session messages - use global toast system
 @if(session('success'))
     document.addEventListener('DOMContentLoaded', function() {
-        showToast('{{ session('success') }}', 'success');
+        if (window.showToast && !window.sessionMessageHandled) {
+            window.showToast('{{ session('success') }}', 'success');
+            window.sessionMessageHandled = true;
+        }
     });
 @endif
 
 @if(session('error'))
     document.addEventListener('DOMContentLoaded', function() {
-        showToast('{{ session('error') }}', 'error');
+        if (window.showToast && !window.sessionMessageHandled) {
+            window.showToast('{{ session('error') }}', 'error');
+            window.sessionMessageHandled = true;
+        }
     });
 @endif
 </script>

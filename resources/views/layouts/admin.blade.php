@@ -21,6 +21,30 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     
     @stack('styles')
+    
+    <!-- Toast Notification Styles -->
+    <style>
+        .toast {
+            @apply bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-sm w-full;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .toast-success {
+            @apply border-green-200 bg-green-50;
+        }
+        
+        .toast-error {
+            @apply border-red-200 bg-red-50;
+        }
+        
+        .toast-warning {
+            @apply border-yellow-200 bg-yellow-50;
+        }
+        
+        .toast-info {
+            @apply border-blue-200 bg-blue-50;
+        }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen">
@@ -357,10 +381,18 @@
     <!-- Toast Notifications Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Handle toast notifications
+            // Global flag to prevent duplicate session messages
+            window.sessionMessageHandled = false;
+            
+            // Handle existing toast notifications
             const toasts = document.querySelectorAll('.toast');
             
             toasts.forEach(function(toast, index) {
+                // Mark session message as handled if there are existing toasts
+                if (!window.sessionMessageHandled) {
+                    window.sessionMessageHandled = true;
+                }
+                
                 // Initial state - hidden and positioned
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateX(100%)';
@@ -397,9 +429,16 @@
                 }, 300);
             }
             
-            // Function to show new toast (for dynamic notifications)
+            // Global function to show new toast (for dynamic notifications)
             window.showToast = function(message, type = 'success') {
+                // Prevent duplicate session messages
+                if (window.sessionMessageHandled && (message.includes('berhasil') || message.includes('error') || message.includes('gagal'))) {
+                    return;
+                }
+                
                 const container = document.getElementById('toast-container');
+                if (!container) return;
+                
                 const toast = document.createElement('div');
                 toast.className = `toast toast-${type}`;
                 
@@ -447,6 +486,9 @@
                 closeButton.addEventListener('click', function() {
                     hideToast(toast);
                 });
+                
+                // Mark session message as handled
+                window.sessionMessageHandled = true;
             };
         });
     </script>

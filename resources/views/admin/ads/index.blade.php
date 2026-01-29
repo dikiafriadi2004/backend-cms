@@ -1049,38 +1049,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Simple toast notification
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-    
-    toast.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg text-white text-sm font-medium shadow-lg transform transition-all duration-300 translate-x-full ${bgColor}`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    // Animate in
-    setTimeout(() => {
-        toast.classList.remove('translate-x-full');
-    }, 100);
-    
-    // Auto remove
-    setTimeout(() => {
-        toast.classList.add('translate-x-full');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-// Laravel session messages
+// Laravel session messages - use global toast system
 @if(session('success'))
     document.addEventListener('DOMContentLoaded', function() {
-        showToast('{{ session('success') }}', 'success');
+        if (window.showToast && !window.sessionMessageHandled) {
+            window.showToast('{{ session('success') }}', 'success');
+            window.sessionMessageHandled = true;
+        }
     });
 @endif
 
 @if(session('error'))
     document.addEventListener('DOMContentLoaded', function() {
-        showToast('{{ session('error') }}', 'error');
+        if (window.showToast && !window.sessionMessageHandled) {
+            window.showToast('{{ session('error') }}', 'error');
+            window.sessionMessageHandled = true;
+        }
     });
 @endif
 </script>

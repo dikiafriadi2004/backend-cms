@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\AdController;
+use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\ContentController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -82,6 +84,28 @@ Route::prefix('v1')->group(function () {
         Route::get('/position/{position}', [AdController::class, 'position']);
         Route::post('/{id}/click', [AdController::class, 'click']);
         Route::get('/{id}/analytics', [AdController::class, 'analytics']);
+    });
+    
+    // Company API
+    Route::prefix('company')->group(function () {
+        Route::get('/profile', [CompanyController::class, 'profile']);
+        Route::get('/site-settings', [CompanyController::class, 'siteSettings']);
+        Route::get('/whatsapp-link', [CompanyController::class, 'whatsappLink']);
+        Route::get('/statistics', [CompanyController::class, 'statistics']);
+    });
+    
+    // Content API (Alternative endpoints with different structure)
+    Route::prefix('content')->group(function () {
+        Route::get('/posts', [ContentController::class, 'posts']);
+        Route::get('/posts/featured', [ContentController::class, 'featuredPosts']);
+        Route::get('/posts/latest', [ContentController::class, 'latestPosts']);
+        Route::get('/post/{slug}', [ContentController::class, 'post']);
+        Route::get('/pages', [ContentController::class, 'pages']);
+        Route::get('/page/{slug}', [ContentController::class, 'page']);
+        Route::get('/categories', [ContentController::class, 'categories']);
+        Route::get('/tags', [ContentController::class, 'tags']);
+        Route::get('/menu/{location}', [ContentController::class, 'menu']);
+        Route::get('/search', [ContentController::class, 'search']);
     });
     
     // Sitemap API
